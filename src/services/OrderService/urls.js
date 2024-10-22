@@ -1,0 +1,12 @@
+export const apiGetTotalStatus = "/api/order/getTotalStatus"
+export const apiGetListOrderUser = "/api/order/getListOrderUser"
+export const apiGetListOrderManager = "/api/order/getListOrderManager"
+export const apiAddOrder = "/api/order/addOrder"
+export const apiGetDetailOrder = "/api/order/getDetailOrder"
+export const apiUpdateStatus = "/api/order/updateStatus"
+export const apiGetDetailUpdate = "/api/order/getDetailUpdate"
+
+export const apiGetListAddressOrder = "/api/order/getListAddressOrder"
+export const apiAddAddress = "/api/order/addAddress"
+export const apiUpdateAddress = "/api/order/updateAddress"
+export const apiDeleteAddress = "/api/order/deleteAddress"

@@ -1,0 +1,46 @@
+@import "./assets/fonts/icon-font/style.css";
+
+:root {
+  --color-primary: #01638d;
+  --color-bgr: #eae7de;
+  --color-header: #693a25;
+  --color-yellow: #e4b95b;
+  --color-orange: #e67e22;
+  --color-brown: #693a25;
+  --color-brown-dark: #612500;
+  --color-blue-dark: #059669;
+  --color-green-500: #10b981;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --text-primary: #4a4a4a;
+  --text-white: #fff;
+}
+.ant-form-item-explain-error {
+  color: #f5222d;
+  font-size: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+*::selection {
+  background-color: #a0a0a0;
+  color: #ffffff; /* Màu văn bản khi được chọn */
+}
+.app {
+  width: 100%;
+  height: 100vh;
+  background-color: #fafaff;
+  display: flex;
+  flex-direction: row;
+}
+
+.action {
+  width: 80vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid #aaa;
+}
