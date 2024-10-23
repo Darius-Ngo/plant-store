@@ -108,17 +108,6 @@ const LoginModal = ({
                     valuePropName="checked"
                     className="mb-0"
                   >
-                    {/* <Checkbox
-                      onChange={val =>
-                        localStorage.setItem(
-                          STORAGE.REMEMBER_LOGIN,
-                          JSON.stringify(val.target.checked),
-                        )
-                      }
-                      value={getStorage(STORAGE.REMEMBER_LOGIN)}
-                    >
-                      Duy trì đăng nhập
-                    </Checkbox> */}
                   </Form.Item>
                   <Link
                     onClick={() => {

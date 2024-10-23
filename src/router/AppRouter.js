@@ -2,6 +2,7 @@ import { Spin } from "antd"
 import React from "react"
 import { useRoutes } from "react-router-dom"
 import ROUTER from "./index"
+import ListOrdered from "src/pages/USER/ListOrdered"
 // ANONYMOUS
 const PublicRouters = React.lazy(() => import("src/pages/PublicRouters"))
 const NotFound = React.lazy(() => import("src/pages/NotFound"))
@@ -46,14 +47,14 @@ const routes = [
       //     </LazyLoadingComponent>
       //   ),
       // },
-      // {
-      //   path: ROUTER.DS_DON_DAT_HANG,
-      //   element: (
-      //     <LazyLoadingComponent>
-      //       <ListOrdered />
-      //     </LazyLoadingComponent>
-      //   ),
-      // },
+      {
+        path: ROUTER.DS_DON_DAT_HANG,
+        element: (
+          <LazyLoadingComponent>
+            <ListOrdered />
+          </LazyLoadingComponent>
+        ),
+      },
     ],
   },
 

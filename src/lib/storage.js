@@ -1,8 +1,6 @@
 const STORAGE = {
   TOKEN: "token",
   USER_INFO: "user-info",
-  REMEMBER_LOGIN: "remember-login",
-  KEY_MENU_ACTIVE: "key-active",
 }
 
 export const getStorage = name => {
