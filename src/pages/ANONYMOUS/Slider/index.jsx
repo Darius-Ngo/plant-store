@@ -14,14 +14,14 @@ import ROUTER from "src/router"
 const list = [
   {
     image: slider_1,
-    title: "Vẻ đẹp từ thiên nhiên",
-    description: "Mang thiên nhiên vào không gian sống của bạn!",
+    title: "Connecting farms",
+    description: "Connecting You to Fresh, Sustainable Agriculture",
     id: 1,
   },
   {
     image: slider_2,
-    title: "Trang trí không gian",
-    description: "Tươi mới mỗi ngày với cây cảnh đẹp mắt!",
+    title: "Protecting health",
+    description: "Defending Health, Building Stronger Lives",
     id: 2,
   },
 ]

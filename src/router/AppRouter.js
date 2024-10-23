@@ -6,21 +6,14 @@ import ROUTER from "./index"
 const PublicRouters = React.lazy(() => import("src/pages/PublicRouters"))
 const NotFound = React.lazy(() => import("src/pages/NotFound"))
 const Home = React.lazy(() => import("src/pages/ANONYMOUS/Home"))
-const MenuPage = React.lazy(() => import("src/pages/ANONYMOUS/MenuPage"))
+const ProductList = React.lazy(() => import("src/pages/ANONYMOUS/ProductList"))
 const ProductDetail = React.lazy(() =>
   import("src/pages/ANONYMOUS/ProductDetail"),
 )
-const ContactSupport = React.lazy(() => import("src/pages/ANONYMOUS/Contact"))
-const AboutUsPage = React.lazy(() => import("src/pages/ANONYMOUS/AboutUsPage"))
-const AboutUsDetail = React.lazy(() =>
-  import("src/pages/ANONYMOUS/AboutUsPage/components/AboutUsDetail"),
-)
-
 // USER
 const PrivateRoutes = React.lazy(() => import("src/pages/PrivateRoutes"))
-const CartPage = React.lazy(() => import("src/pages/USER/CartPage"))
-const ListOrdered = React.lazy(() => import("src/pages/USER/ListOrdered"))
-const MyRequest = React.lazy(() => import("src/pages/USER/MyRequest"))
+// const CartPage = React.lazy(() => import("src/pages/USER/CartPage"))
+// const ListOrdered = React.lazy(() => import("src/pages/USER/ListOrdered"))
 
 function LazyLoadingComponent({ children }) {
   return (
@@ -45,34 +38,22 @@ const routes = [
       </LazyLoadingComponent>
     ),
     children: [
-      {
-        path: ROUTER.DOI_MAT_KHAU,
-        element: <LazyLoadingComponent></LazyLoadingComponent>,
-      },
-      {
-        path: ROUTER.CHI_TIET_GIO_HANG,
-        element: (
-          <LazyLoadingComponent>
-            <CartPage />
-          </LazyLoadingComponent>
-        ),
-      },
-      {
-        path: ROUTER.DS_DON_DAT_HANG,
-        element: (
-          <LazyLoadingComponent>
-            <ListOrdered />
-          </LazyLoadingComponent>
-        ),
-      },
-      {
-        path: ROUTER.QL_YCHT,
-        element: (
-          <LazyLoadingComponent>
-            <MyRequest />
-          </LazyLoadingComponent>
-        ),
-      },
+      // {
+      //   path: ROUTER.CHI_TIET_GIO_HANG,
+      //   element: (
+      //     <LazyLoadingComponent>
+      //       <CartPage />
+      //     </LazyLoadingComponent>
+      //   ),
+      // },
+      // {
+      //   path: ROUTER.DS_DON_DAT_HANG,
+      //   element: (
+      //     <LazyLoadingComponent>
+      //       <ListOrdered />
+      //     </LazyLoadingComponent>
+      //   ),
+      // },
     ],
   },
 
@@ -96,7 +77,7 @@ const routes = [
         path: ROUTER.DS_SAN_PHAM,
         element: (
           <LazyLoadingComponent>
-            <MenuPage />
+            <ProductList />
           </LazyLoadingComponent>
         ),
       },
@@ -105,30 +86,6 @@ const routes = [
         element: (
           <LazyLoadingComponent>
             <ProductDetail />
-          </LazyLoadingComponent>
-        ),
-      },
-      {
-        path: ROUTER.HO_TRO,
-        element: (
-          <LazyLoadingComponent>
-            <ContactSupport />
-          </LazyLoadingComponent>
-        ),
-      },
-      {
-        path: ROUTER.GIOI_THIEU,
-        element: (
-          <LazyLoadingComponent>
-            <AboutUsPage />
-          </LazyLoadingComponent>
-        ),
-      },
-      {
-        path: ROUTER.GIOI_THIEU_CHI_TIET,
-        element: (
-          <LazyLoadingComponent>
-            <AboutUsDetail />
           </LazyLoadingComponent>
         ),
       },

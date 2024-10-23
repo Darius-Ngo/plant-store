@@ -48,8 +48,8 @@ const ChangePasswordModal = ({ onCancel, open }) => {
     try {
       setLoading(true)
       const values = await form.validateFields()
-      const res = await AuthService.changePassWord({
-        id: userInfo.id,
+      const res = await AuthService.changePassword({
+        // id: userInfo.id,
         ...values,
       })
       if (res.isError) return
@@ -84,11 +84,6 @@ const ChangePasswordModal = ({ onCancel, open }) => {
                       required: true,
                       message: "Bạn chưa nhập mật khẩu cũ!",
                     },
-                    // {
-                    //   pattern: getRegexPassword(),
-                    //   message:
-                    //     "Mật khẩu có chứa ít nhất 8 ký tự, trong đó có ít nhất một số và bao gồm cả chữ thường và chữ hoa và ký tự đặc biệt, ví dụ @, #, ?, !.",
-                    // },
                   ]}
                   name="oldPassword"
                 >

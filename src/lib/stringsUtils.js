@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-useless-escape */
-import { Encoder } from "./encoder"
 
 export const SYMBOLS_REGEX =
   /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|`|-|{|}|\||\\/g //eslint-disable-line
@@ -109,31 +108,9 @@ export function getRegexMobile() {
   return re
 }
 
-export const decodeHtml = textInput => {
-  if (!textInput) return ""
-  const removeHtml = textInput.replace(/<\/?[^>]+(>|$)/g, "")
-  const decode = Encoder.htmlDecode(removeHtml)
-  return decode
-}
-
 export const stripHtml = textInput => {
   if (!textInput) return ""
   return textInput.replace(/<\/?[^>]+(>|$)/g, "")
-}
-
-export const convertContent = text => {
-  let content
-  try {
-    const parseText = JSON.parse(decodeHtml(text))
-    content = [parseText?.ActionName, parseText?.ProcessedContent]
-      .join(parseText?.ActionName && parseText?.ProcessedContent ? ": " : "")
-      .concat(
-        parseText?.SendReportHandle ? ` ${parseText?.SendReportHandle}` : "",
-      )
-  } catch (e) {
-    content = text
-  }
-  return content
 }
 
 export const fixImplicateText = text => {

@@ -29,6 +29,9 @@ export const ModalWrapper = styled.div`
   .ant-modal-body {
     background-color: red;
   }
+  .ant-btn-primary {
+    background-color: red;
+  }
 `
 
 export const ModalStyled = styled(Modal)`
@@ -39,4 +42,5 @@ export const ModalStyled = styled(Modal)`
   .ant-modal-confirm-body {
     display: block;
   }
+
 `

@@ -11,10 +11,8 @@ import UseWindowSize from "src/lib/useWindowSize"
 import { resetState } from "src/redux/appGlobal"
 import { setOpenLoginModal } from "src/redux/loginModal"
 import ROUTER from "src/router"
-import AuthService from "src/services/AuthService"
 import LayoutCommon from "../Common/Layout"
 import SvgIcon from "../SvgIcon"
-import BreadcrumbHome from "./BreadcrumbHome/BreadcrumbHome"
 import MenuItemBreadcrumb, { MenuHeader } from "./MenuItems"
 import CartSmall from "./component/CartSmall"
 import ChangePasswordModal from "./component/ChangePasswordModal"
@@ -25,6 +23,7 @@ import ModalUserInfo from "./component/ModalUserInfo"
 import RegisterModal from "./component/RegisterModal"
 import { CustomMenuStyled, LayoutStyled, StyleMenuAccount } from "./styled"
 import "./styles.scss"
+import BreadcrumbHome from "./component/BreadcrumbHome/BreadcrumbHome"
 
 const { Header, Content } = Layout
 
@@ -198,7 +197,7 @@ const MainLayout = ({ children }) => {
                           className="logo mr-12"
                           alt="logo"
                         />
-                        <div className="logo-text pointer">PLant Store</div>
+                        <div className="logo-text pointer">Farm Connect</div>
                       </span>
                     </div>
                   </Col>
@@ -292,7 +291,7 @@ const MainLayout = ({ children }) => {
               ),
             })}
           </div>
-        </div>
+        </div>                                          
       </Header>
       <BreadcrumbHome />
       <Layout>

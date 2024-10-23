@@ -1,19 +1,17 @@
-import { Tooltip, Empty, Spin } from "antd"
-import { MdDeleteOutline } from "react-icons/md"
-import React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { CartSmallStyle } from "./styled"
+import { Empty, Modal, Spin, Tooltip } from "antd"
 import { useState } from "react"
-import CartService from "src/services/CartService"
-import { setListCart } from "src/redux/appGlobal"
-import ROUTER from "src/router"
-import { useNavigate } from "react-router-dom"
+import { MdDeleteOutline } from "react-icons/md"
+import { useDispatch, useSelector } from "react-redux"
 import Button from "src/components/MyButton/Button"
-import { formatMoney, formatMoneyVND } from "src/lib/utils"
 import Notice from "src/components/Notice"
+import { formatMoney, formatMoneyVND } from "src/lib/utils"
+import { setListCart } from "src/redux/appGlobal"
+import CartService from "src/services/CartService"
+import { CartSmallStyle } from "./styled"
+import OrderService from "src/services/OrderService"
+import CB1 from "src/components/Modal/CB1"
 
 const CartSmall = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { listCart, userInfo } = useSelector(state => state.appGlobal)
   const [loading, setLoading] = useState(false)
@@ -27,20 +25,33 @@ const CartSmall = () => {
       setLoading(false)
     }
   }
-
-  const handleDelete = async id => {
-    try {
-      setLoading(true)
-      const res = await CartService.deleteCart(id)
-      Notice({
-        msg: "Xóa thành công."
-      })
-      await getListCart(userInfo.id)
-    } finally {
-      setLoading(false)
+  
+    const handleDelete = async id => {
+      try {
+        setLoading(true)
+        const res = await CartService.deleteCart(id)
+        Notice({
+          msg: "Xóa thành công."
+        })
+        await getListCart(userInfo.id)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
-
+  
+    const handleOrder = async () => {
+      try {
+        setLoading(true)
+        const res = await OrderService.addOrder({user_id: userInfo.id})
+        Notice({
+          msg: "Đặt hàng thành công."
+        })
+        await getListCart(userInfo.id)
+      } finally {
+        setLoading(false)
+      }
+    }
+  
   return (
     <CartSmallStyle>
       <Spin spinning={loading}>
@@ -85,15 +96,16 @@ const CartSmall = () => {
             />
           )}
         </div>
-        {/* <div
-          className="btn-order"
-          onClick={() => navigate(ROUTER.CHI_TIET_GIO_HANG)}
-        >
-          <button>Đặt hàng ngay</button>
-        </div> */}
         <div className="d-flex justify-content-flex-end pr-16 pl-16">
           <Button
-            onClick={() => navigate(ROUTER.CHI_TIET_GIO_HANG)}
+            onClick={() => CB1({
+              title: `Bạn có chắc chắn muốn đặt hàng không?`,
+              icon: "signSuccess",
+              okText: "Đồng ý",
+              onOk: () => {
+                handleOrder()
+              },
+            })}
             btnType="red"
             className="text-right mt-12"
           >

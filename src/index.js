@@ -16,32 +16,27 @@ import store from "src/redux/store"
 import { ThemeProvider } from "styled-components"
 import App from "./App"
 import ErrorBoundary from "./components/Boundary"
-import { initFacebookSdk } from "./lib/init-fb-sdk"
 import { theme } from "./theme"
 const root = ReactDOM.createRoot(document.getElementById("root"))
 
-const startApp = () => {
-  root.render(
-    <BrowserRouter>
-      <ThemeProvider
-        theme={{
-          ...theme,
-        }}
-      >
-        <ConfigProvider locale={vnVN}>
-          <Provider store={store}>
-            <StoreProvider>
-              <ErrorBoundary>
-                <App />
-              </ErrorBoundary>
-            </StoreProvider>
-          </Provider>
-        </ConfigProvider>
-      </ThemeProvider>
-    </BrowserRouter>,
-    // </React.StrictMode>,
-    document.getElementById("root"),
-  )
-}
-
-initFacebookSdk().then(startApp)
+root.render(
+  <BrowserRouter>
+    <ThemeProvider
+      theme={{
+        ...theme,
+      }}
+    >
+      <ConfigProvider locale={vnVN}>
+        <Provider store={store}>
+          <StoreProvider>
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
+          </StoreProvider>
+        </Provider>
+      </ConfigProvider>
+    </ThemeProvider>
+  </BrowserRouter>,
+  // </React.StrictMode>,
+  document.getElementById("root"),
+)

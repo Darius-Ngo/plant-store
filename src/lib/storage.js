@@ -6,19 +6,10 @@ const STORAGE = {
 }
 
 export const getStorage = name => {
-  const remember = localStorage.getItem(STORAGE.REMEMBER_LOGIN)
-  let data
-  if (remember) {
-    data =
-      typeof window !== "undefined" && name !== undefined
-        ? localStorage.getItem(name)
-        : ""
-  } else {
-    data =
-      typeof window !== "undefined" && name !== undefined
-        ? sessionStorage.getItem(name)
-        : ""
-  }
+  let data =
+    typeof window !== "undefined" && name !== undefined
+      ? localStorage.getItem(name)
+      : ""
   try {
     if (data) return JSON.parse(data)
   } catch (err) {
@@ -27,31 +18,16 @@ export const getStorage = name => {
 }
 
 export const setStorage = (name, value) => {
-  const remember = localStorage.getItem(STORAGE.REMEMBER_LOGIN)
   const stringify = typeof value !== "string" ? JSON.stringify(value) : value
-  if (remember) {
-    return localStorage.setItem(name, stringify)
-  } else {
-    return sessionStorage.setItem(name, stringify)
-  }
+  return localStorage.setItem(name, stringify)
 }
 
 export const deleteStorage = name => {
-  const remember = localStorage.getItem(STORAGE.REMEMBER_LOGIN)
-  if (remember) {
-    return localStorage.removeItem(name)
-  } else {
-    return sessionStorage.removeItem(name)
-  }
+  return localStorage.removeItem(name)
 }
 
 export const clearStorage = () => {
-  const remember = localStorage.getItem(STORAGE.REMEMBER_LOGIN)
-  if (remember) {
-    return localStorage.clear()
-  } else {
-    return sessionStorage.clear()
-  }
+  return localStorage.clear()
 }
 
 export default STORAGE

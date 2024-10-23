@@ -15,17 +15,16 @@ import FlInput from "src/components/FloatingLabel/Input"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
 import SelectAddress from "src/components/SelectAddress"
+import { getRegexPhoneNumber } from "src/lib/stringsUtils"
+import { formatMoneyVND, normFile } from "src/lib/utils"
 import { setListCart } from "src/redux/appGlobal"
+import ROUTER from "src/router"
 import CartService from "src/services/CartService"
 import OrderService from "src/services/OrderService"
 import { InfoOrderStyle } from "../styled"
-import ROUTER from "src/router"
 import ModalSelectAddress from "./ModalSelectAddress"
-import { getRegexPhoneNumber } from "src/lib/stringsUtils"
-import { formatMoneyVND, normFile } from "src/lib/utils"
 // import { ButtonUploadStyle } from "src/pages/ADMIN/EmployeeManager/styled"
-import SvgIcon from "src/components/SvgIcon"
-import FileService from "src/services/FileService"
+// import FileService from "src/services/FileService"
 
 const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
   const navigate = useNavigate()
@@ -92,7 +91,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
         values?.ImgTransfer?.map(i =>
           formData.append("fileList", i.originFileObj),
         )
-        resImg = await FileService.uploadListFile(formData)
+        // resImg = await FileService.uploadListFile(formData)
       }
       setLoading(true)
       const res = await OrderService.addOrder({

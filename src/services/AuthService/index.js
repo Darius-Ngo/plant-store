@@ -1,29 +1,26 @@
 import http from "../index"
 import {
   apiLogin,
-  apiLogout,
   apiRegister,
-  apiChangePassWord,
-  apiForgetPassWord,
-  apiConfirmOTP,
-  apiLoginFacebook,
+  apiChangePassword,
+  apiForgotPassword,
+  apiGetUserInfo,
+  apiUpdateUserInfo,
 } from "./urls"
 
 const login = body => http.post(apiLogin, body)
 const register = body => http.post(apiRegister, body)
-const changePassWord = body => http.post(apiChangePassWord, body)
-const forgetPassWord = body => http.post(apiForgetPassWord, body)
-const confirmOTP = body => http.post(apiConfirmOTP, body)
-const logout = () => http.post(apiLogout)
-const loginFacebook = () => http.get(apiLoginFacebook)
+const changePassword = body => http.post(apiChangePassword, body)
+const forgotPassword = body => http.post(apiForgotPassword, body)
+const updateUserInfo = body => http.put(apiUpdateUserInfo, body)
+const getUserInfo = params => http.get(apiGetUserInfo)
 
 const AuthService = {
   login,
-  logout,
   register,
-  changePassWord,
-  forgetPassWord,
-  confirmOTP,
-  loginFacebook,
+  changePassword,
+  forgotPassword,
+  updateUserInfo,
+  getUserInfo,
 }
 export default AuthService

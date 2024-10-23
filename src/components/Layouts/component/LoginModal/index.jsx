@@ -1,19 +1,16 @@
 import { Col, Divider, Form, Row } from "antd"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import bgr_login from "src/assets/images/login/login.jpg"
 import FlInput from "src/components/FloatingLabel/Input"
 import Button from "src/components/MyButton/Button"
+import Notice from "src/components/Notice"
 import STORAGE, { setStorage } from "src/lib/storage"
-import { StoreContext } from "src/lib/store"
-import { hasPermission } from "src/lib/utils"
 import { setListCart, setUserInfo } from "src/redux/appGlobal"
 import AuthService from "src/services/AuthService"
 import CartService from "src/services/CartService"
-import { MenuItemAdmin } from "../../MenuItems"
 import { ModalLoginStyle, StyleLoginModal } from "./styled"
-import Notice from "src/components/Notice"
 
 const LoginModal = ({
   openLoginModal,
@@ -24,26 +21,8 @@ const LoginModal = ({
 }) => {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { routerStore } = useContext(StoreContext)
-  const [routerBeforeLogin, setRouterBeforeLogin] = routerStore
 
-  const comeStartPage = async listTab => {
-    const menuAdmin = MenuItemAdmin()
-      ?.filter(x => hasPermission(x?.TabID, listTab))
-      .map(i => ({
-        ...i,
-        children: i?.children?.filter(x => hasPermission(x?.TabID, listTab)),
-      }))
-    let startPage = "/"
-    if (!!menuAdmin && !!menuAdmin[0]) {
-      startPage = menuAdmin[0]?.children?.[0]?.key || menuAdmin[0]?.key
-    } else if (!!(menuAdmin[0]?.key?.charAt(0) === "/")) {
-      startPage = menuAdmin[0]?.key
-    }
-    navigate(startPage)
-  }
   const getListCart = async user_id => {
     try {
       setLoading(true)
@@ -69,30 +48,6 @@ const LoginModal = ({
       dispatch(setUserInfo(data))
       getListCart(data.id)
       handleCancel()
-      if (stopNavigate) return
-      else {
-        if (routerBeforeLogin) return navigate(routerBeforeLogin)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-  const loginGG = async () => {
-    try {
-      setLoading(true)
-      const res = await AuthService.loginGG()
-      if (res?.isError) return
-      window.location.replace(res?.Object)
-    } finally {
-      setLoading(false)
-    }
-  }
-  const loginFB = async () => {
-    try {
-      setLoading(true)
-      const res = await AuthService.loginFacebook()
-      if (res?.isError) return
-      window.location.replace(res?.Object)
     } finally {
       setLoading(false)
     }

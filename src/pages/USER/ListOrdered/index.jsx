@@ -9,9 +9,6 @@ import { formatMoneyVND } from "src/lib/utils"
 import Button from "src/components/MyButton/Button"
 import OrderDetail from "./components/OrderDetail"
 import CancelOrder from "./components/CancelOrder"
-import ModalRate from "./components/ModalRate"
-import ModalViewRate from "./components/ModalViewRate"
-// import ModalViewImg from "src/pages/ADMIN/OrderManager/components/ModalViewImg"
 
 const ListOrdered = () => {
   const { userInfo } = useSelector(state => state.appGlobal)
@@ -21,9 +18,6 @@ const ListOrdered = () => {
   const [total, setTotal] = useState(0)
   const [openDetail, setOpenDetail] = useState(false)
   const [openCancelOrder, setOpenCancelOrder] = useState(false)
-  const [openRate, setOpenRate] = useState(false)
-  const [openViewRate, setOpenViewRate] = useState(false)
-  const [listImg, setListImg] = useState(false)
   const [condition, setCondition] = useState({
     id_nguoi_dat: userInfo.id,
     status: 0,
@@ -74,37 +68,6 @@ const ListOrdered = () => {
           }
         >
           Hủy đơn
-        </Button>
-      )}
-      {item?.danh_gia && !data?.da_danh_gia && (
-        <Button
-          btnType="orange"
-          onClick={() =>
-            setOpenRate({
-              ...data,
-              chuyen_tt: item?.danh_gia?.chuyen_tt,
-            })
-          }
-        >
-          Đánh giá
-        </Button>
-      )}
-      {!!data?.da_danh_gia && (
-        <Button btnType="orange-third" onClick={() => setOpenViewRate(data)}>
-          Xem đánh giá
-        </Button>
-      )}
-      {!!data?.chung_tu_tt && (
-        <Button
-          btnType="third"
-          onClick={() =>
-            setListImg({
-              ...data,
-              chung_tu_tt: data.chung_tu_tt.split(","),
-            })
-          }
-        >
-          Chứng từ thanh toán
         </Button>
       )}
       {item?.mua_lai && <Button btnType="orange">Mua lại</Button>}
@@ -221,27 +184,6 @@ const ListOrdered = () => {
           }}
         />
       )}
-      {!!openRate && (
-        <ModalRate
-          open={openRate}
-          onCancel={() => setOpenRate(false)}
-          onOk={() => {
-            getListOrder()
-            getTotalStatus()
-          }}
-        />
-      )}
-      {!!openViewRate && (
-        <ModalViewRate
-          open={openViewRate}
-          onCancel={() => setOpenViewRate(false)}
-          onOk={() => {
-            getListOrder()
-            getTotalStatus()
-          }}
-        />
-      )}
-      {/* <ModalViewImg open={listImg} onCancel={() => setListImg(false)} /> */}
     </LayoutCommon>
   )
 }

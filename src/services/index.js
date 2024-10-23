@@ -77,7 +77,7 @@ instance.interceptors.request.use(
         config.data instanceof FormData ? config.data : trimData(config.data)
     }
     config.headers = {
-      Authorization: getStorage(STORAGE.TOKEN) || "5W+3CaFlo0GnUltbhGtcgA==",
+      Authorization: `Bearer ${getStorage(STORAGE.TOKEN)}` || "5W+3CaFlo0GnUltbhGtcgA==",
       // Authorization: getStorage(STORAGE.TOKEN) || "1tjyE+/5HUqKlhwI1IwXwg==",
     }
     config.baseURL = process.env.REACT_APP_API_ROOT
