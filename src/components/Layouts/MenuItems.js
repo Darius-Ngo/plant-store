@@ -9,6 +9,10 @@ const MenuItemBreadcrumb = () => {
       label: "Chi tiết sản phẩm",
       key: ROUTER.CHI_TIET_SAN_PHAM,
     },
+    {
+      label: "đặt hàng",
+      key: ROUTER.CHI_TIET_GIO_HANG,
+    },
   ]
 }
 

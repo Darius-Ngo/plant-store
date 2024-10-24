@@ -1,8 +1,7 @@
-import { Spin } from "antd"
 import React from "react"
 import { useRoutes } from "react-router-dom"
+import SpinCustom from "src/components/Spin"
 import ROUTER from "./index"
-import ListOrdered from "src/pages/USER/ListOrdered"
 // ANONYMOUS
 const PublicRouters = React.lazy(() => import("src/pages/PublicRouters"))
 const NotFound = React.lazy(() => import("src/pages/NotFound"))
@@ -13,15 +12,15 @@ const ProductDetail = React.lazy(() =>
 )
 // USER
 const PrivateRoutes = React.lazy(() => import("src/pages/PrivateRoutes"))
-// const CartPage = React.lazy(() => import("src/pages/USER/CartPage"))
-// const ListOrdered = React.lazy(() => import("src/pages/USER/ListOrdered"))
+const CartPage = React.lazy(() => import("src/pages/USER/CartPage"))
+const ListOrdered = React.lazy(() => import("src/pages/USER/ListOrdered"))
 
 function LazyLoadingComponent({ children }) {
   return (
     <React.Suspense
       fallback={
         <div className="loading-center" style={{ height: "100vh" }}>
-          <Spin />
+          <SpinCustom />
         </div>
       }
     >
@@ -39,14 +38,14 @@ const routes = [
       </LazyLoadingComponent>
     ),
     children: [
-      // {
-      //   path: ROUTER.CHI_TIET_GIO_HANG,
-      //   element: (
-      //     <LazyLoadingComponent>
-      //       <CartPage />
-      //     </LazyLoadingComponent>
-      //   ),
-      // },
+      {
+        path: ROUTER.CHI_TIET_GIO_HANG,
+        element: (
+          <LazyLoadingComponent>
+            <CartPage />
+          </LazyLoadingComponent>
+        ),
+      },
       {
         path: ROUTER.DS_DON_DAT_HANG,
         element: (

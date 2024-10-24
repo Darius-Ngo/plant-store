@@ -1,4 +1,4 @@
-import { Col, Divider, Row, Space, Spin, Steps } from "antd"
+import { Col, Divider, Row, Space, Steps } from "antd"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import SvgIcon from "src/components/SvgIcon"
@@ -6,6 +6,7 @@ import { formatMoneyVND } from "src/lib/utils"
 import OrderServices from "src/services/OrderService"
 import { ModalOrderDetail, OrderDetailStyled, StepsStyled } from "../styled"
 // import Vote from "./Vote"
+import SpinCustom from "src/components/Spin"
 import {
   COLOR_STATUS_ORDER,
   PAYMENT_TYPE,
@@ -141,7 +142,7 @@ const OrderDetail = ({ detail, open, onCancel, setBtn }) => {
       onCancel={onCancel}
       closeIcon={false}
     >
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <OrderDetailStyled>
           <Row className="justify-content-space-between">
             <div />
@@ -286,7 +287,7 @@ const OrderDetail = ({ detail, open, onCancel, setBtn }) => {
             />
           )} */}
         </OrderDetailStyled>
-      </Spin>
+      </SpinCustom>
     </ModalOrderDetail>
   )
 }

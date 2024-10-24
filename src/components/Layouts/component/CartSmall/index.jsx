@@ -1,18 +1,19 @@
-import { Empty, Modal, Spin, Tooltip } from "antd"
+import { Empty, Tooltip } from "antd"
 import { useState } from "react"
 import { MdDeleteOutline } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import { formatMoney, formatMoneyVND } from "src/lib/utils"
 import { setListCart } from "src/redux/appGlobal"
+import ROUTER from "src/router"
 import CartService from "src/services/CartService"
 import { CartSmallStyle } from "./styled"
-import OrderService from "src/services/OrderService"
-import CB1 from "src/components/Modal/CB1"
-import ROUTER from "src/router"
 
 const CartSmall = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { listCart, userInfo } = useSelector(state => state.appGlobal)
   const [loading, setLoading] = useState(false)
@@ -40,37 +41,9 @@ const CartSmall = () => {
     }
   }
 
-  const handlePayment = async order_id => {
-    try {
-      setLoading(true)
-      const res = await OrderService.paymentsOrder({
-        order_id,
-        callbackUrl: `${window.location.origin}/${ROUTER.DS_DON_DAT_HANG}`,
-      })
-      if (!res?.data) return
-      window.open(res?.data?.url)
-    } finally {
-      setLoading(false)
-    }
-  }
-  const handleOrder = async () => {
-    try {
-      setLoading(true)
-      const res = await OrderService.addOrder({ user_id: userInfo.id })
-      if (!res?.data) return
-      Notice({
-        msg: res?.data?.message || "Đặt hàng thành công, vui lòng thanh toán.",
-      })
-      await handlePayment(res?.data?.order?.id)
-      await getListCart(userInfo.id)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <CartSmallStyle>
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <div className="cart-title">Danh sách sản phẩm</div>
         <div className="cart-content">
           {listCart &&
@@ -120,15 +93,17 @@ const CartSmall = () => {
         </div>
         <div className="d-flex justify-content-flex-end pr-16 pl-16">
           <Button
-            onClick={() =>
-              CB1({
-                title: `Bạn có chắc chắn muốn đặt hàng không?`,
-                icon: "signSuccess",
-                okText: "Đồng ý",
-                onOk: () => {
-                  handleOrder()
-                },
-              })
+            onClick={
+              () => navigate(ROUTER.CHI_TIET_GIO_HANG)
+              // CB1({
+              //   title: `Bạn có chắc chắn muốn đặt hàng không?`,
+              //   icon: "signSuccess",
+              //   okText: "Đồng ý",
+              //   onOk: () => {
+              //     navigate(ROUTER.CHI_TIET_GIO_HANG)
+              //     // handleOrder()
+              //   },
+              // })
             }
             btnType="red"
             className="text-right mt-12"
@@ -136,7 +111,7 @@ const CartSmall = () => {
             Đặt hàng ngay
           </Button>
         </div>
-      </Spin>
+      </SpinCustom>
     </CartSmallStyle>
   )
 }

@@ -1,4 +1,4 @@
-import { Col, InputNumber, Row, Spin, Tabs } from "antd"
+import { Col, InputNumber, Row, Tabs } from "antd"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
@@ -7,6 +7,7 @@ import { setOpenLoginModal } from "src/redux/loginModal"
 import ProductService from "src/services/ProductService"
 // import SwiperCore, { Autoplay } from "swiper"
 import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import { formatMoneyVND } from "src/lib/utils"
 import { setListCart } from "src/redux/appGlobal"
 import CartService from "src/services/CartService"
@@ -15,7 +16,7 @@ import { InputChangeQuantity, ProductDetailStyle, TabsStyled } from "./styled"
 
 const ProductDetail = () => {
   const { userInfo, listCart } = useSelector(state => state?.appGlobal)
-  console.log('listCart: ', listCart);
+  console.log("listCart: ", listCart)
   const { product } = useLocation().state
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -24,7 +25,6 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const [cartInfo, setCartInfo] = useState()
-
 
   const getListProduct = async () => {
     try {
@@ -98,7 +98,10 @@ const ProductDetail = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
     getListProduct()
-    if(!!listCart?.length && listCart.find(i => i.product_id === product?.id)) {
+    if (
+      !!listCart?.length &&
+      listCart.find(i => i.product_id === product?.id)
+    ) {
       const cartInfo = listCart.find(i => i.product_id === product?.id)
       setAdded(true)
       setCartInfo(cartInfo)
@@ -127,18 +130,15 @@ const ProductDetail = () => {
   ]
   return (
     <ProductDetailStyle>
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <div className="container-product-detail-page_content">
           <LayoutCommon>
             <div className="wrap-info">
               <Row gutter={16}>
                 <Col span={8}>
-                    <div className="wrap-img">
-                      <img
-                        src={product?.imageUrl}
-                        alt={product?.name}
-                      />
-                    </div>
+                  <div className="wrap-img">
+                    <img src={product?.imageUrl} alt={product?.name} />
+                  </div>
                 </Col>
                 <Col span={12}>
                   <div className="wrap-content">
@@ -154,9 +154,7 @@ const ProductDetail = () => {
                             Loại:
                           </div>
                           <div className="fs-20">
-                            <strong>
-                              {product.category}
-                            </strong>
+                            <strong>{product.category}</strong>
                           </div>
                         </div>
                         <div className="d-flex align-items-center">
@@ -164,11 +162,7 @@ const ProductDetail = () => {
                             Giá:{" "}
                           </div>
                           <div className="product-price">
-                            <strong>
-                              {formatMoneyVND(
-                                product.price,
-                              )}
-                            </strong>
+                            <strong>{formatMoneyVND(product.price)}</strong>
                           </div>
                         </div>
                         <div className="d-flex align-items-center">
@@ -204,12 +198,14 @@ const ProductDetail = () => {
                           </InputChangeQuantity>
                         </div>
                       </div>
-                      {!added ? ( 
+                      {!added ? (
                         <div className="btn-order" onClick={handleOrder}>
                           THÊM VÀO GIỎ
                         </div>
                       ) : (
-                        <div className="btn-order" onClick={handleUpdateOrder}>CẬP NHẬT VÀO GIỎ</div>
+                        <div className="btn-order" onClick={handleUpdateOrder}>
+                          CẬP NHẬT VÀO GIỎ
+                        </div>
                       )}
                     </div>
                   </div>
@@ -261,7 +257,7 @@ const ProductDetail = () => {
             </Row>
           </LayoutCommon>
         </div>
-      </Spin>
+      </SpinCustom>
     </ProductDetailStyle>
   )
 }

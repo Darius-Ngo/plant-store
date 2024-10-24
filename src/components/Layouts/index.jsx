@@ -32,9 +32,7 @@ const MainLayout = ({ children }) => {
   const location = useLocation()
   const dispatch = useDispatch()
   const { openLoginModal } = useSelector(state => state.loginModal)
-  const { userInfo, listCart } = useSelector(
-    state => state?.appGlobal,
-  )
+  const { userInfo, listCart } = useSelector(state => state?.appGlobal)
   const isLogin = getStorage(STORAGE.TOKEN)
   const [open, setOpen] = useState(false)
   const [selectedKey, setSelectedKey] = useState(
@@ -89,7 +87,7 @@ const MainLayout = ({ children }) => {
                 <span className="fw-400">Thông tin tài khoản</span>
               </div>
             </Menu.Item>
-            {/* <Menu.Item
+            <Menu.Item
               key="4"
               onClick={() => {
                 navigate(ROUTER.DS_DON_DAT_HANG)
@@ -99,7 +97,7 @@ const MainLayout = ({ children }) => {
                 <SvgIcon name="document" />
                 <span className="fw-400">Danh sách đơn hàng</span>
               </div>
-            </Menu.Item> */}
+            </Menu.Item>
             <Menu.Item
               key="6"
               onClick={() => {
@@ -193,7 +191,11 @@ const MainLayout = ({ children }) => {
                         }`}
                       >
                         <img
-                          src={location?.pathname === ROUTER.HOME && isTransparent ? Logo : Logo2}
+                          src={
+                            location?.pathname === ROUTER.HOME && isTransparent
+                              ? Logo
+                              : Logo2
+                          }
                           className="logo mr-12"
                           alt="logo"
                         />
@@ -220,25 +222,24 @@ const MainLayout = ({ children }) => {
                     >
                       {!!isLogin ? (
                         <div className="d-flex justify-content-flex-end align-items-center">
-                          {
-                            location.pathname !== ROUTER.CHI_TIET_GIO_HANG && (
-                              <Badge
-                                count={listCart?.length}
-                                overflowCount={99}
-                                size="middle"
-                                className="badge-count mr-12 pointer"
+                          {location.pathname !== ROUTER.CHI_TIET_GIO_HANG && (
+                            <Badge
+                              count={listCart?.length}
+                              overflowCount={99}
+                              size="middle"
+                              className="badge-count mr-12 pointer"
+                            >
+                              <Dropdown
+                                overlay={<CartSmall />}
+                                placement="bottomRight"
+                                arrow={{ pointAtCenter: true }}
                               >
-                                <Dropdown
-                                  overlay={<CartSmall />}
-                                  placement="bottomRight"
-                                  arrow={{ pointAtCenter: true }}
-                                >
-                                  <div className="wrap-icon-cart">
-                                    <ShoppingCartOutlined className="fs-18" />
-                                  </div>
-                                </Dropdown>
-                              </Badge>
-                            )}
+                                <div className="wrap-icon-cart">
+                                  <ShoppingCartOutlined className="fs-18" />
+                                </div>
+                              </Dropdown>
+                            </Badge>
+                          )}
                           {/* <Notification /> */}
                           <Dropdown
                             overlay={menuAccount}
@@ -291,22 +292,22 @@ const MainLayout = ({ children }) => {
               ),
             })}
           </div>
-        </div>                                          
+        </div>
       </Header>
       <BreadcrumbHome />
       <Layout>
         <Content className="site-layout-background">
-              <div
-                className="w-100"
-                style={
-                  location.pathname === ROUTER.HOME
-                    ? { position: "relative", top: -53 }
-                    : { top: 0 }
-                }
-              >
-                {children}
-              </div>
-              <Footer />
+          <div
+            className="w-100"
+            style={
+              location.pathname === ROUTER.HOME
+                ? { position: "relative", top: -53 }
+                : { top: 0 }
+            }
+          >
+            {children}
+          </div>
+          <Footer />
         </Content>
       </Layout>
       <Drawer

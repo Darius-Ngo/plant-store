@@ -1,10 +1,11 @@
-import { Form, Row, Spin } from "antd"
+import { Form, Row } from "antd"
 import { useState } from "react"
 import { useSelector } from "react-redux"
 import FlInput from "src/components/FloatingLabel/Input"
 import CustomModal from "src/components/Modal/CustomModal"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import { getRegexPassword } from "src/lib/stringsUtils"
 import AuthService from "src/services/AuthService"
 import styled from "styled-components"
@@ -70,7 +71,7 @@ const ChangePasswordModal = ({ onCancel, open }) => {
       open={open}
       onCancel={onCancel}
     >
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <StyleChangePassword>
           <div className="d-flex flex-column justify-content-center h-100">
             <div className="title-page text-center mb-30">
@@ -152,7 +153,7 @@ const ChangePasswordModal = ({ onCancel, open }) => {
             </div>
           </div>
         </StyleChangePassword>
-      </Spin>
+      </SpinCustom>
     </CustomModal>
   )
 }

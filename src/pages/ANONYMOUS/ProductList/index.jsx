@@ -1,7 +1,8 @@
-import { Col, Input, InputNumber, Pagination, Row, Space, Spin } from "antd"
+import { Col, Input, InputNumber, Pagination, Row, Space } from "antd"
 import { useEffect, useState } from "react"
 import LayoutCommon from "src/components/Common/Layout/index.js"
 import Button from "src/components/MyButton/Button/index.js"
+import SpinCustom from "src/components/Spin/index.js"
 import ProductService from "src/services/ProductService/index.js"
 import ProductCard from "../ProductCard/index.jsx"
 import "./styled.js"
@@ -39,11 +40,15 @@ const ProductList = () => {
 
   return (
     <ProductListStyle>
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <LayoutCommon>
           <Row className="mb-16" gutter={[16, 16]}>
             <Col xs={24} mb={10} lg={10}>
-              <Input allowClear placeholder="Tìm theo loại sản phẩm" onChange={e => setCategoryName(e.target.value)} />
+              <Input
+                allowClear
+                placeholder="Tìm theo loại sản phẩm"
+                onChange={e => setCategoryName(e.target.value)}
+              />
             </Col>
             <Col xs={24} mb={6} lg={6}>
               <InputNumber
@@ -77,11 +82,11 @@ const ProductList = () => {
               </Button>
             </Col>
           </Row>
-            <Space size={16} wrap={true}>
+          <Space size={16} wrap={true}>
             {listProducts.map((product, i) => (
               <ProductCard product={product} isSmall={true} />
             ))}
-            </Space>
+          </Space>
           <div className="d-flex align-items-center justify-content-center mt-24 w-100">
             <Pagination
               className="d-flex"
@@ -98,7 +103,7 @@ const ProductList = () => {
             />
           </div>
         </LayoutCommon>
-      </Spin>
+      </SpinCustom>
     </ProductListStyle>
   )
 }

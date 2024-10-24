@@ -1,8 +1,9 @@
-import { Form, Modal, Row, Spin } from "antd"
+import { Form, Modal, Row } from "antd"
 import { useState } from "react"
 import FlInput from "src/components/FloatingLabel/Input"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import { getRegexEmail } from "src/lib/stringsUtils"
 import AuthService from "src/services/AuthService"
 import styled from "styled-components"
@@ -42,7 +43,7 @@ const ForgetPasswordModal = ({ onCancel, open }) => {
       onCancel={onCancel}
       maskClosable={false}
     >
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <div className="d-flex flex-column justify-content-center h-100">
           <div className="title-page text-center mb-12">
             <div className="fs-22 fw-600 ">Quên mật khẩu</div>
@@ -82,7 +83,7 @@ const ForgetPasswordModal = ({ onCancel, open }) => {
             </Form>
           </div>
         </div>
-      </Spin>
+      </SpinCustom>
     </ModalStyle>
   )
 }

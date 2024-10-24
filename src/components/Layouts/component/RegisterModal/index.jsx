@@ -1,12 +1,10 @@
-import { Col, Form, Row, Spin } from "antd"
+import { Col, Form, Row } from "antd"
 import { useState } from "react"
 import FlInput from "src/components/FloatingLabel/Input"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
-import {
-  getRegexEmail,
-  getRegexPassword
-} from "src/lib/stringsUtils"
+import SpinCustom from "src/components/Spin"
+import { getRegexEmail, getRegexPassword } from "src/lib/stringsUtils"
 import AuthService from "src/services/AuthService"
 import styled from "styled-components"
 import { ModalLoginStyle, StyleLoginModal } from "../LoginModal/styled"
@@ -56,7 +54,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
       onCancel={handleCancel}
     >
       <ModalStyle>
-        <Spin spinning={loading}>
+        <SpinCustom spinning={loading}>
           <Row>
             <Col span={24}>
               <StyleLoginModal>
@@ -66,7 +64,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
                 <div>
                   <Form form={form} layout="vertical">
                     <Row gutter={16}>
-                    <Col span={24}>
+                      <Col span={24}>
                         <Form.Item
                           name="name"
                           rules={[
@@ -79,7 +77,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
                           <FlInput label="Họ tên" isRequired />
                         </Form.Item>
                       </Col>
-                    <Col span={24}>
+                      <Col span={24}>
                         <Form.Item
                           name="email"
                           rules={[
@@ -130,9 +128,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
                                   return Promise.resolve()
                                 }
                                 return Promise.reject(
-                                  new Error(
-                                    "Mật khẩu nhập lại không khớp!",
-                                  ),
+                                  new Error("Mật khẩu nhập lại không khớp!"),
                                 )
                               },
                             }),
@@ -152,9 +148,9 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
                         </div>
                         <div className="note">- Có ít nhất 8 ký tự.</div>
                         <div className="note">
-                          - Có chứa từ 03 trong 04 loại ký tự sau: Chữ hoa (A, B,
-                          C, …); Chữ thường (a, b, c, …); Ký tự đặc biệt (!, @,
-                          #, …); Số (0,1,...9).
+                          - Có chứa từ 03 trong 04 loại ký tự sau: Chữ hoa (A,
+                          B, C, …); Chữ thường (a, b, c, …); Ký tự đặc biệt (!,
+                          @, #, …); Số (0,1,...9).
                         </div>
                         <div className="note mb-20">
                           - Không chứa khoảng trống
@@ -190,7 +186,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
               </StyleLoginModal>
             </Col>
           </Row>
-        </Spin>
+        </SpinCustom>
       </ModalStyle>
     </ModalLoginStyle>
   )

@@ -1,11 +1,12 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons"
-import { Col, ConfigProvider, Form, Radio, Row, Space, Spin } from "antd"
-import { useEffect, useState } from "react"
+import { Col, ConfigProvider, Form, Radio, Row, Space } from "antd"
+import { useState } from "react"
 import { useSelector } from "react-redux"
 import FlInput from "src/components/FloatingLabel/Input"
 import CustomModal from "src/components/Modal/CustomModal"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import OrderService from "src/services/OrderService"
 
 const CancelOrder = ({ open, onOk, onCancel }) => {
@@ -63,7 +64,7 @@ const CancelOrder = ({ open, onOk, onCancel }) => {
         </div>
       }
     >
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <div
           className="fs-16 fw-600 mb-16 text-center"
           style={{
@@ -147,7 +148,7 @@ const CancelOrder = ({ open, onOk, onCancel }) => {
             </Row>
           </Form>
         </ConfigProvider>
-      </Spin>
+      </SpinCustom>
     </CustomModal>
   )
 }

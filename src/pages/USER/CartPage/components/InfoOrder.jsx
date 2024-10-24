@@ -1,140 +1,85 @@
-import {
-  Col,
-  ConfigProvider,
-  Form,
-  Image,
-  Radio,
-  Row,
-  Spin,
-  Upload,
-} from "antd"
+import { Col, ConfigProvider, Form, Image, Radio, Row } from "antd"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import FlInput from "src/components/FloatingLabel/Input"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
-import SelectAddress from "src/components/SelectAddress"
+import SpinCustom from "src/components/Spin"
 import { getRegexPhoneNumber } from "src/lib/stringsUtils"
-import { formatMoneyVND, normFile } from "src/lib/utils"
+import { formatMoneyVND } from "src/lib/utils"
 import { setListCart } from "src/redux/appGlobal"
 import ROUTER from "src/router"
 import CartService from "src/services/CartService"
 import OrderService from "src/services/OrderService"
 import { InfoOrderStyle } from "../styled"
-import ModalSelectAddress from "./ModalSelectAddress"
-// import { ButtonUploadStyle } from "src/pages/ADMIN/EmployeeManager/styled"
-// import FileService from "src/services/FileService"
 
 const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
-  const [openModalAddress, setOpenModalAddress] = useState(false)
-  const [addressSelect, setAddressSelect] = useState(false)
-  const [typePay, setTypePay] = useState(1)
-  const [imgQR, setImgQR] = useState("")
-  const [maDon, setMaDonHang] = useState("")
-  const handleLoadQR = async () => {
-    const ma_don = Date.now().toString()
-    setMaDonHang(ma_don)
-    setLoading(true)
-    OrderService.getQR({
-      accountNo: 39393696789,
-      accountName: "Tiem cafe bat on",
-      acqId: 970423,
-      addInfo: `Thanh toan tien don hang ${ma_don}`, // ${open.ProfileType}
-      amount: totalMoney,
-      format: "text",
-      template: "my5OhSW",
-    })
-      .then(async res => {
-        if (res.data.code === "00") {
-          setImgQR(res.data.data.qrDataURL)
-        }
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-  const getListAddress = async () => {
-    try {
-      setLoading(true)
-      const res = await OrderService.getListAddressOrder({
-        id_nguoi_dung: userInfo.id,
-      })
-      if (res.isError) return
-      if (res.Object?.length) {
-        setAddressSelect(res.Object[0])
-      } else {
-        setAddressSelect({
-          ten_nguoi_nhan: userInfo.ho_ten,
-          sdt_nguoi_nhan: userInfo.sdt,
-          id_tp: userInfo.id_tp,
-          id_qh: userInfo.id_qh,
-          id_xp: userInfo.id_xp,
-          dia_chi_chi_tiet: userInfo.thon_xom,
-        })
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [typePay, setTypePay] = useState("COD")
+  const [shipping_fee, setShippingFee] = useState(25000)
 
-  const handleOrder = async () => {
-    try {
-      const values = await form.validateFields()
-      let resImg
-      if (typePay === 2) {
-        const formData = new FormData()
-        values?.ImgTransfer?.map(i =>
-          formData.append("fileList", i.originFileObj),
-        )
-        // resImg = await FileService.uploadListFile(formData)
-      }
-      setLoading(true)
-      const res = await OrderService.addOrder({
-        ...values,
-        id_nguoi_dat: userInfo.id,
-        kieu_thanh_toan: typePay,
-        tong_tien: totalMoney,
-        ds_san_pham: listProduct,
-        ma_don: typePay === 2 ? maDon : undefined,
-        chung_tu_tt: typePay === 2 ? resImg?.Object?.toString() : "",
-      })
-      if (res.isError) return
-      getListCart()
-      Notice({
-        msg: "Đặt hàng thành công.",
-      })
-      navigate(ROUTER.DS_SAN_PHAM)
-    } finally {
-      setLoading(false)
-    }
-  }
-  const getListCart = async () => {
+  const getListCart = async user_id => {
     try {
       setLoading(true)
-      const res = await CartService.getListCart(userInfo.id)
+      const res = await CartService.getListCart(user_id)
       dispatch(setListCart(res.data || []))
     } finally {
       setLoading(false)
     }
   }
+
+  const handlePayment = async order_id => {
+    try {
+      setLoading(true)
+      const res = await OrderService.paymentsOrder({
+        order_id,
+        callbackUrl: `${window.location.origin}/${ROUTER.DS_DON_DAT_HANG}`,
+      })
+      if (!res?.data) return
+      window.open(res?.data?.url)
+    } finally {
+      setLoading(false)
+    }
+  }
+  const handleOrder = async () => {
+    try {
+      setLoading(true)
+      const data = await form.validateFields()
+      const res = await OrderService.addOrder({
+        ...data,
+        user_id: userInfo.id,
+        payment_method: typePay,
+        shipping_fee: shipping_fee,
+      })
+      if (!res?.data) return
+      Notice({
+        msg: res?.data?.message || "Đặt hàng thành công.",
+      })
+      if (typePay === "bank_transfer") {
+        await handlePayment(res?.data?.order?.id)
+        await getListCart(userInfo.id)
+      } else {
+        await getListCart(userInfo.id)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
-    getListAddress()
+    form.setFieldsValue({
+      user_name: userInfo.username,
+      user_phone: userInfo.phone,
+      shipping_address: userInfo.address,
+    })
   }, [])
-  useEffect(() => {
-    form.setFieldsValue(addressSelect)
-  }, [addressSelect])
-  useEffect(() => {
-    if (typePay === 2) handleLoadQR()
-  }, [typePay])
+
   return (
-    <Spin spinning={loading}>
+    <SpinCustom spinning={loading}>
       <InfoOrderStyle>
-        <Form layout="vertical" form={form} initialValues={addressSelect}>
+        <Form layout="vertical" form={form}>
           <Row gutter={24}>
             <Col span={16} className="pb-16">
               <div
@@ -142,13 +87,6 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                 style={{ borderBottom: "2px solid #ddd" }}
               >
                 Thông tin đặt hàng
-                <Button
-                  btnType="orange-third"
-                  className="d-flex align-items-center"
-                  onClick={() => setOpenModalAddress(true)}
-                >
-                  Địa chỉ đã lưu
-                </Button>
               </div>
               <Row gutter={24}>
                 <Col span={24}>
@@ -162,7 +100,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                         message: "Tên người nhận không được để trống!",
                       },
                     ]}
-                    name={"ten_nguoi_nhan"}
+                    name={"user_name"}
                   >
                     <FlInput label="Tên người nhận" isRequired />
                   </Form.Item>
@@ -179,7 +117,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                         message: "Số điện thoại sai định dạng",
                       },
                     ]}
-                    name={"sdt_nguoi_nhan"}
+                    name={"user_phone"}
                   >
                     <FlInput label="SĐT người nhận" isRequired />
                   </Form.Item>
@@ -187,41 +125,25 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                 <Col span={24}>
                   <div className="fw-600 mb-12">Địa chỉ nhận hàng</div>
                 </Col>
-                <Col span={24}>
-                  <SelectAddress
-                    floating={true}
-                    form={form}
-                    required
-                    initValue={
-                      addressSelect
-                        ? {
-                            id_tp: addressSelect?.id_tp,
-                            id_qh: addressSelect?.id_qh,
-                            id_xp: addressSelect?.id_xp,
-                          }
-                        : {}
-                    }
-                    listFormName={["id_tp", "id_qh", "id_xp"]}
-                  />
-                </Col>
+                <Col span={24}></Col>
                 <Col span={24}>
                   <Form.Item
                     rules={[
                       {
                         required: true,
-                        message: "Địa chỉ chi tiết không được để trống!",
+                        message: "Địa chỉ nhận hàng không được để trống!",
                       },
                     ]}
-                    name={"dia_chi_chi_tiet"}
+                    name={"shipping_address"}
                   >
-                    <FlInput label="Địa chỉ chi tiết" isRequired />
+                    <FlInput label="Địa chỉ nhận hàng" isRequired />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
                   <div className="fw-600 mb-12">Ghi chú cho cửa hàng</div>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name={"ghi_chu"}>
+                  <Form.Item name={"note"}>
                     <FlInput textArea label="Ghi chú" style={{ height: 120 }} />
                   </Form.Item>
                 </Col>
@@ -248,9 +170,9 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                   >
                     <div className="d-flex align-items-flex-end">
                       <Image
-                        src={i?.anh}
+                        src={i?.imageUrl}
                         width={50}
-                        alt={i.ten_san_pham}
+                        alt={""}
                         preview={false}
                       />
                       <div>
@@ -258,14 +180,13 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                           style={{ color: "var(--color-brown-dark)" }}
                           className="fw-600 fs-13"
                         >
-                          {i.ten_san_pham}
+                          {i.name}
                         </div>
                         <div
                           className="fs-11 mt-4"
                           style={{ color: "var(--color-yellow)" }}
                         >
-                          {i?.size},{" "}
-                          <span className="fs-13">x{i.so_luong}</span>
+                          <span className="fs-13">x{i.quantity}</span>
                         </div>
                       </div>
                     </div>
@@ -275,10 +196,29 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                         color: "var(--color-yellow)",
                       }}
                     >
-                      {formatMoneyVND(i.so_luong * i.gia_ban)}
+                      {formatMoneyVND(i.quantity * i.price)}
                     </div>
                   </div>
                 ))}
+                <div
+                  className="d-flex align-items-flex-end justify-content-space-between pt-12 pb-12 pr-12"
+                  style={{
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <div
+                    className="fw-600"
+                    style={{ color: "var(--color-brown-dark)" }}
+                  >
+                    Phí ship
+                  </div>
+                  <div
+                    className="fw-600"
+                    style={{ color: "var(--color-brown-dark)" }}
+                  >
+                    {formatMoneyVND(shipping_fee)}
+                  </div>
+                </div>
                 <div
                   className="d-flex align-items-flex-end justify-content-space-between pt-12 pb-12 pr-12 fs-16"
                   style={{
@@ -292,7 +232,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                       color: "var(--color-orange)",
                     }}
                   >
-                    {formatMoneyVND(totalMoney)}
+                    {formatMoneyVND(totalMoney + shipping_fee)}
                   </div>
                 </div>
               </div>
@@ -310,64 +250,10 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                   value={typePay}
                   className="radio-user mb-12"
                 >
-                  <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                  <Radio value={2}>Thanh toán trực tuyến</Radio>
+                  <Radio value={"COD"}>Thanh toán khi nhận hàng</Radio>
+                  <Radio value={"bank_transfer"}>Thanh toán trực tuyến</Radio>
                 </Radio.Group>
               </ConfigProvider>
-              {typePay === 2 && imgQR && (
-                <>
-                  <Image
-                    src={imgQR}
-                    // width={"auto"}
-                    style={{ width: "100%" }}
-                    preview={false}
-                  />
-                  <Form.Item
-                    label="Chứng từ thanh toán"
-                    name="ImgTransfer"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Chứng từ thanh toán không được để trống!",
-                      },
-                      // () => ({
-                      //   validator(_, value) {
-                      //     if (!!value?.find(i => i?.size > 5 * 1024 * 1024)) {
-                      //       return Promise.reject(
-                      //         new Error("Dung lượng file tối đa 5MB"),
-                      //       )
-                      //     }
-                      //     return Promise.resolve()
-                      //   },
-                      // }),
-                    ]}
-                  >
-                    <Upload
-                      accept="image/*, .pdf"
-                      multiple={true}
-                      // maxCount={1}
-                      beforeUpload={() => false}
-                      listType="picture-card"
-                    >
-                      <Row className="align-items-center">
-                        {/* <ButtonUploadStyle>
-                          <Button className="account-button-upload ">
-                            <Row className="account-background-upload d-flex align-items-center">
-                              <SvgIcon name="add-media-video" />
-                              <div className="account-text-upload ml-16">
-                                Chọn ảnh
-                              </div>
-                            </Row>
-                          </Button>
-                        </ButtonUploadStyle> */}
-                      </Row>
-                    </Upload>
-                  </Form.Item>
-                </>
-              )}
-
               <Button
                 btnType="orange"
                 className="w-100 d-flex align-items-center"
@@ -379,19 +265,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
           </Row>
         </Form>
       </InfoOrderStyle>
-      {openModalAddress && (
-        <ModalSelectAddress
-          open={openModalAddress}
-          onCancel={() => {
-            setOpenModalAddress(false)
-          }}
-          handleOk={() => getListAddress()}
-          userInfo={userInfo}
-          setAddressSelect={setAddressSelect}
-          addressSelect={addressSelect}
-        />
-      )}
-    </Spin>
+    </SpinCustom>
   )
 }
 

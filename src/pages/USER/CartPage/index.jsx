@@ -1,69 +1,91 @@
-import { Col, Form, Image, InputNumber, Row, Spin, message } from "antd"
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons"
+import { Col, Image, InputNumber, Row } from "antd"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-// import ModalSelectLocal from "./components/ModalSelectLocal"
 import LayoutCommon from "src/components/Common/Layout"
+import CB1 from "src/components/Modal/CB1"
+import Button from "src/components/MyButton/Button"
+import ButtonCircle from "src/components/MyButton/ButtonCircle"
+import Notice from "src/components/Notice"
+import SpinCustom from "src/components/Spin"
 import TableCustom from "src/components/Table/CustomTable"
+import { formatMoneyVND } from "src/lib/utils"
 import { InputChangeQuantity } from "src/pages/ANONYMOUS/ProductDetail/styled"
 import { setListCart } from "src/redux/appGlobal"
 import CartService from "src/services/CartService"
-import { CartPageStyle } from "./styled"
-import ButtonCircle from "src/components/MyButton/ButtonCircle"
-import Button from "src/components/MyButton/Button"
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons"
-import CB1 from "src/components/Modal/CB1"
 import InfoOrder from "./components/InfoOrder"
-import { formatMoneyVND } from "src/lib/utils"
+import { CartPageStyle } from "./styled"
 
 const CartPage = () => {
   const { listCart, userInfo } = useSelector(state => state.appGlobal)
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [rowSelected, setRowSelected] = useState(listCart)
   const [openInfoOrder, setOpenInfoOrder] = useState(false)
   const [totalMoney, setTotalMoney] = useState(0)
 
-  const changeValueTable = (idx, object) => {
-    dispatch(
-      setListCart(
-        listCart?.map((i, index) => {
-          if (+i.id !== +object.id) return i
-          return { ...i, ...object }
-        }),
-      ),
-    )
-    setRowSelected(pre =>
-      pre?.map((i, index) => {
-        if (+i.id !== +object.id) return i
-        return { ...i, ...object }
-      }),
-    )
+  const handleUpdateQuantity = async (cart_id, body) => {
+    try {
+      setLoading(true)
+      const res = await CartService.updateCart(cart_id, body)
+      if (res.isError) return
+      await getListCart(userInfo.id)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getListCart = async user_id => {
+    try {
+      setLoading(true)
+      const res = await CartService.getListCart(user_id)
+      dispatch(setListCart(res.data || []))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDeleteProduct = async id => {
+    try {
+      setLoading(true)
+      const res = await CartService.deleteCart(id)
+      Notice({
+        msg: "Xóa thành công.",
+      })
+      await getListCart(userInfo.id)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     setTotalMoney(
-      rowSelected.reduce((total, i) => total + i.gia_ban * i.so_luong, 0),
+      listCart.reduce((total, i) => total + i?.quantity * i?.Product?.price, 0),
     )
-  }, [rowSelected])
+  }, [listCart])
 
   const columns = [
     {
       title: `Sản phẩm`,
-      dataIndex: "ten_san_pham",
-      key: "ten_san_pham",
+      dataIndex: "Product",
+      key: "Product",
       align: "left",
       render: (value, record, index) => (
         <div className="d-flex align-items-center justify-content-flex-start">
-          <Image src={record?.anh} width={50} alt={value} preview={false} />
+          <Image
+            src={value?.imageUrl}
+            width={50}
+            alt={"image"}
+            preview={false}
+          />
           <div className="ml-8">
             <div
               style={{ color: "var(--color-brown-dark)" }}
               className="fw-600"
             >
-              {value}
+              {value?.name}
             </div>
             <div className="fs-12" style={{ color: "var(--color-yellow)" }}>
-              {record?.size}
+              x {record?.quantity}
             </div>
           </div>
         </div>
@@ -71,27 +93,22 @@ const CartPage = () => {
     },
     {
       title: `Giá`,
-      dataIndex: "gia_ban",
-      key: "gia_ban",
+      dataIndex: "Product",
+      key: "Product2",
       align: "left",
       width: 140,
       render: (value, record, index) => (
         <div className="d-flex flex-column">
           <strong style={{ color: "var(--color-brown-dark)" }}>
-            {formatMoneyVND(value)}
+            {formatMoneyVND(value.price)}
           </strong>
-          {!!record.gia_ban_goc && (
-            <del className="sub-color fs-10">
-              {formatMoneyVND(record.gia_ban_goc)}
-            </del>
-          )}
         </div>
       ),
     },
     {
       title: `Số lượng`,
-      dataIndex: "so_luong",
-      key: "so_luong",
+      dataIndex: "quantity",
+      key: "quantity",
       align: "left",
       width: 140,
       render: (value, record, index) => (
@@ -100,9 +117,9 @@ const CartPage = () => {
             className="btn-change"
             disabled={value === 1}
             onClick={() =>
-              changeValueTable(index, {
-                ...record,
-                so_luong: value - 1,
+              handleUpdateQuantity(record.id, {
+                quantity: value - 1,
+                product_id: record?.Product?.id,
               })
             }
           >
@@ -112,9 +129,10 @@ const CartPage = () => {
             className="input-change"
             value={value}
             onChange={event =>
-              changeValueTable(index, {
-                ...record,
-                so_luong: event?.target?.value ? +event?.target?.value : 1,
+              event &&
+              handleUpdateQuantity(record.id, {
+                quantity: event,
+                product_id: record?.Product?.id,
               })
             }
             min={1}
@@ -128,9 +146,9 @@ const CartPage = () => {
             className="btn-change"
             disabled={value >= 100}
             onClick={() =>
-              changeValueTable(index, {
-                ...record,
-                so_luong: value + 1,
+              handleUpdateQuantity(record.id, {
+                quantity: value + 1,
+                product_id: record?.Product?.id,
               })
             }
           >
@@ -149,7 +167,7 @@ const CartPage = () => {
         <div className="d-flex align-items-center justify-content-space-between">
           <div className="d-flex flex-column">
             <strong style={{ color: "var(--color-brown-dark)" }}>
-              {formatMoneyVND(value)}
+              {formatMoneyVND(record.quantity * record?.Product?.price)}
             </strong>
           </div>
           <ButtonCircle
@@ -159,24 +177,11 @@ const CartPage = () => {
             colorTooltip="var(--color-red-500)"
             onClick={() => {
               CB1({
-                title: `Bạn có chắc chắn muốn xóa sản phẩm "${record.ten_san_pham}" khỏi giỏ hàng không?`,
+                title: `Bạn có chắc chắn muốn xóa sản phẩm "${record?.Product?.name}" khỏi giỏ hàng không?`,
                 icon: "trashRed",
                 okText: "Đồng ý",
                 onOk: () => {
-                  setLoading(true)
-                  CartService.deleteCart({
-                    cartIds: [record.id],
-                  })
-                    .then(res => {
-                      if (res.isError) return
-                      dispatch(
-                        setListCart(listCart?.filter(i => i.id !== record.id)),
-                      )
-                      setRowSelected(pre =>
-                        pre?.filter(i => i.id !== record.id),
-                      )
-                    })
-                    .finally(() => setLoading(false))
+                  handleDeleteProduct(record.id)
                 },
               })
             }}
@@ -189,7 +194,7 @@ const CartPage = () => {
   return (
     <CartPageStyle>
       <LayoutCommon>
-        <Spin spinning={loading}>
+        <SpinCustom spinning={loading}>
           {openInfoOrder ? (
             <div
               className="fs-24 fw-600 mb-12 pointer"
@@ -209,7 +214,7 @@ const CartPage = () => {
           )}
           {openInfoOrder ? (
             <InfoOrder
-              listProduct={rowSelected}
+              listProduct={listCart.map(i => ({ ...i, ...i.Product }))}
               userInfo={userInfo}
               totalMoney={totalMoney}
             />
@@ -224,69 +229,18 @@ const CartPage = () => {
                   columns={columns}
                   sticky={{ offsetHeader: -12 }}
                   textEmpty="Không có dữ liệu"
-                  rowSelection={{
-                    type: "checkbox",
-                    preserveSelectedRowKeys: true,
-                    selectedRowKeys: rowSelected?.map(i => i?.id),
-                    onChange: (selectedRows, selectedRowKeys) => {
-                      setRowSelected(selectedRowKeys)
-                    },
-                  }}
-                  pagination={false}
-                  // pagination={{
-                  //   hideOnSinglePage: listCart?.length <= 10,
-                  //   current: pagination?.CurrentPage,
-                  //   pageSize: pagination?.PageSize,
-                  //   responsive: true,
-                  //   total: listCart?.length,
-                  //   locale: { items_per_page: "" },
-                  //   showSizeChanger: listCart?.length > 20,
-                  //   onChange: (page, pageSize) => {
-                  //     setPagination({
-                  //       ...pagination,
-                  //       CurrentPage: page,
-                  //       PageSize: pageSize,
-                  //     })
+                  // rowSelection={{
+                  //   type: "checkbox",
+                  //   preserveSelectedRowKeys: true,
+                  //   selectedRowKeys: rowSelected?.map(i => i?.id),
+                  //   onChange: (selectedRows, selectedRowKeys) => {
+                  //     setRowSelected(selectedRowKeys)
                   //   },
                   // }}
+                  pagination={false}
                   rowKey="id"
                   scroll={{ x: "600px", y: "calc(100vh - 240px)" }}
                 />
-                {!!rowSelected?.length && (
-                  <span
-                    className="d-flex justify-content-flex-start mt-12 ml-12 delete-link"
-                    onClick={() => {
-                      CB1({
-                        title: `Bạn có chắc chắn muốn xóa những sản phẩm đã chọn không?`,
-                        icon: "trashRed",
-                        okText: "Đồng ý",
-                        onOk: () => {
-                          setLoading(true)
-                          CartService.deleteCart({
-                            cartIds: rowSelected?.map(i => i?.id),
-                          })
-                            .then(res => {
-                              if (res.isError) return
-                              dispatch(
-                                setListCart(
-                                  listCart?.filter(
-                                    i =>
-                                      !rowSelected
-                                        ?.map(i => i?.id)
-                                        .includes(i.id),
-                                  ),
-                                ),
-                              )
-                              setRowSelected([])
-                            })
-                            .finally(() => setLoading(false))
-                        },
-                      })
-                    }}
-                  >
-                    Xóa sản phẩm ({rowSelected?.length})
-                  </span>
-                )}
               </Col>
               <Col
                 span={8}
@@ -335,7 +289,6 @@ const CartPage = () => {
                 <Button
                   btnType="orange"
                   className="w-100 d-flex align-items-center"
-                  disabled={!rowSelected.length}
                   onClick={() => setOpenInfoOrder(true)}
                 >
                   ĐẶT HÀNG NGAY <ArrowRightOutlined className="ml-16" />
@@ -343,7 +296,7 @@ const CartPage = () => {
               </Col>
             </Row>
           )}
-        </Spin>
+        </SpinCustom>
       </LayoutCommon>
     </CartPageStyle>
   )

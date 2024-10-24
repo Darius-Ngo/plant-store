@@ -1,15 +1,13 @@
-import { Col, Form, Input, Row, Select, Spin } from "antd"
+import { Col, Form, Input, Row, Select } from "antd"
 import { useEffect, useState } from "react"
 import CustomModal from "src/components/Modal/CustomModal"
 import Button from "src/components/MyButton/Button"
 import Notice from "src/components/Notice"
-import {
-  getRegexEmail,
-  getRegexPhoneNumber
-} from "src/lib/stringsUtils"
+import { getRegexEmail, getRegexPhoneNumber } from "src/lib/stringsUtils"
 import styled from "styled-components"
 // import { ButtonUploadStyle } from "src/pages/ADMIN/EmployeeManager/styled"
 import { useDispatch } from "react-redux"
+import SpinCustom from "src/components/Spin"
 import STORAGE, { setStorage } from "src/lib/storage"
 import { setUserInfo } from "src/redux/appGlobal"
 import AuthService from "src/services/AuthService"
@@ -91,7 +89,7 @@ const ModalChangeInfo = ({ onOk, open, onCancel }) => {
       open={open}
       onCancel={onCancel}
     >
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <Styled>
           <div className="title-page mb-12">Cập nhật thông tin</div>
           <Form form={form} layout="vertical">
@@ -151,7 +149,7 @@ const ModalChangeInfo = ({ onOk, open, onCancel }) => {
             </Row>
           </Form>
         </Styled>
-      </Spin>
+      </SpinCustom>
     </CustomModal>
   )
 }

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react"
-import { ListOrderedStyle } from "./styled"
-import { Col, Divider, Row, Space, Spin, Tabs } from "antd"
-import LayoutCommon from "src/components/Common/Layout"
-import OrderService from "src/services/OrderService"
+import { Col, Divider, Row, Space } from "antd"
+import moment from "moment"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { COLOR_STATUS_ORDER, SIZE_PRODUCT } from "src/constants/constants"
-import { formatMoneyVND } from "src/lib/utils"
+import LayoutCommon from "src/components/Common/Layout"
 import Button from "src/components/MyButton/Button"
+import SpinCustom from "src/components/Spin"
+import { formatMoneyVND } from "src/lib/utils"
+import OrderService from "src/services/OrderService"
+import { ListOrderedStyle } from "./styled"
 // import OrderDetail from "./components/OrderDetail"
 // import CancelOrder from "./components/CancelOrder"
 
@@ -52,7 +53,7 @@ const ListOrdered = () => {
   )
   return (
     <LayoutCommon>
-      <Spin spinning={loading}>
+      <SpinCustom spinning={loading}>
         <ListOrderedStyle>
           {/* <Tabs
             defaultActiveKey="1"
@@ -110,8 +111,14 @@ const ListOrdered = () => {
                         {item?.ten_trang_thai}
                       </div> */}
                       <Space className="align-items-center">
-                        <div className="sub-color">{item?.id}</div>
-                        <Divider type="vertical" />
+                        <div className="sub-color">
+                          Ngày đặt:{" "}
+                          {moment(item?.order_date).format("DD/MM/YYYY")}
+                        </div>
+                        <Divider
+                          type="vertical"
+                          style={{ background: "#999" }}
+                        />
                         <div
                           className="fw-600"
                           // style={{ color: COLOR_STATUS_ORDER[item.status] }}
@@ -137,7 +144,7 @@ const ListOrdered = () => {
               ))}
           </Row>
         </ListOrderedStyle>
-      </Spin>
+      </SpinCustom>
       {/* {!!openDetail && (
         <OrderDetail
           detail={openDetail}

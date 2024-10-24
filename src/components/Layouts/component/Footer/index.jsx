@@ -60,7 +60,9 @@ const Footer = () => {
           </Row>
         </LayoutCommon>
       </div>
-      <div className="end-page">© 2023 Bản quyền thuộc về NGUYỄN PHÚC HẢI</div>
+      <div className="end-page">
+        © 2024 Bản quyền thuộc về NGUYỄN PHÚC HẢI FPT
+      </div>
     </FooterStyled>
   )
 }
