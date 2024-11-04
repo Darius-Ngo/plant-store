@@ -75,7 +75,7 @@ export const ROLE_LIST = [
 ]
 
 export const InfoContact = {
-  address: "495 Đ. Nguyễn Trãi, Thanh Xuân, Hà Nội.",
-  phone: "0368.119.911",
-  email: "plantstore@gmail.com",
+  address: "campus HCM (Lô E2a-7, Đường D1, Khu Công nghệ cao, P.Long Thạnh Mỹ, Tp. Thủ Đức, TP.HCM)",
+  phone: "0918.927.042",
+  email: "duongphitx@gmail.com",
 }

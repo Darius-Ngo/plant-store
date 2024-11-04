@@ -48,7 +48,7 @@ const Footer = () => {
             </Col>
             <Col span={8}>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d465.74282373304806!2d105.79186361770364!3d20.954820538996092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ad57e2bfcded%3A0x1d6d1b856dc8a3c1!2zTsO0bmcgVHLhuqFpIFhhbmg!5e0!3m2!1svi!2s!4v1729575671818!5m2!1svi!2s"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.6050419939!2d106.80891740003713!3d10.841506933782268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752731176b07b1%3A0xb752b24b379bae5e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgVFAuIEhDTQ!5e0!3m2!1svi!2s!4v1730715827735!5m2!1svi!2s"
                 width={"100%"}
                 // height={200}
                 style={{ border: 0 }}

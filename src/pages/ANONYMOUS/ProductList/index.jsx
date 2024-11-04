@@ -1,4 +1,4 @@
-import { Col, Input, InputNumber, Pagination, Row, Space } from "antd"
+import { Col, Input, InputNumber, Pagination, Row, Space, Tabs } from "antd"
 import { useEffect, useState } from "react"
 import LayoutCommon from "src/components/Common/Layout/index.js"
 import Button from "src/components/MyButton/Button/index.js"
@@ -10,7 +10,7 @@ import { ProductListStyle } from "./styled.js"
 const ProductList = () => {
   const [loading, setLoading] = useState(false)
   const [listProducts, setListProducts] = useState([])
-  const [categoryName, setCategoryName] = useState()
+  const [categoryName, setCategoryName] = useState("Đà Lạt")
   const [minPrice, setMinPrice] = useState()
   const [maxPrice, setMaxPrice] = useState()
   const [page, setPage] = useState(1)
@@ -36,7 +36,7 @@ const ProductList = () => {
   useEffect(() => {
     window.scroll(0, 0)
     getProductByFilters()
-  }, [page, pageSize])
+  }, [page, pageSize, categoryName])
 
   return (
     <ProductListStyle>
@@ -44,10 +44,30 @@ const ProductList = () => {
         <LayoutCommon>
           <Row className="mb-16" gutter={[16, 16]}>
             <Col xs={24} mb={10} lg={10}>
-              <Input
+              {/* <Input
                 allowClear
                 placeholder="Tìm theo loại sản phẩm"
                 onChange={e => setCategoryName(e.target.value)}
+              /> */}
+              <Tabs
+                type="card"
+                size={"small"}
+                activeKey={categoryName}
+                onChange={key => setCategoryName(key)}
+                items={[
+                  {
+                    label: `Đặc sản Đà Lạt`,
+                    key: "Đà Lạt",
+                  },
+                  {
+                    label: `Đặc sản Bình Phước`,
+                    key: "Bình Phước",
+                  },
+                  {
+                    label: `Đặc sản Bến Tre`,
+                    key: "Bến Tre",
+                  },
+                ]}
               />
             </Col>
             <Col xs={24} mb={6} lg={6}>
