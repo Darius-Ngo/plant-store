@@ -15,28 +15,26 @@ const ProductCard = ({ hoverable = false, product, isSmall = false }) => {
         color="volcano"
         style={!product.isDiscord && { display: "none" }}
       > */}
-        <Card
-          hoverable={hoverable}
-          style={{
-            width: isSmall ? 210 : 240,
-          }}
-          cover={
-            <img alt="ảnh" src={product.imageUrl} className="product-img" />
-          }
-          className="pointer"
-          onClick={() =>
-            navigate(ROUTER.CHI_TIET_SAN_PHAM, {
-              state: {
-                product,
-              },
-            })
-          }
-        >
-          <Meta
-            title={
-              <div>
-                <div className="product-name">{product.name}</div>
-                {/* <div className="rate-product">
+      <Card
+        hoverable={hoverable}
+        style={{
+          width: isSmall ? 210 : 240,
+        }}
+        cover={<img alt="ảnh" src={product.imageUrl} className="product-img" />}
+        className="pointer"
+        onClick={() =>
+          navigate(ROUTER.CHI_TIET_SAN_PHAM, {
+            state: {
+              product,
+            },
+          })
+        }
+      >
+        <Meta
+          title={
+            <div>
+              <div className="product-name">{product.name}</div>
+              {/* <div className="rate-product">
                   <Rate
                     disabled
                     defaultValue={+product.danh_gia_trung_binh}
@@ -47,13 +45,16 @@ const ProductCard = ({ hoverable = false, product, isSmall = false }) => {
                     {product.tong_danh_gia} đánh giá
                   </div>
                 </div> */}
-                <div className="product-price fs-14 mt-8">
-                  {formatMoneyVND(product.price)} <span className="fs-13" style={{color: "#888"}}>/ 500g</span>
-                </div>
+              <div className="product-price fs-14 mt-8">
+                {formatMoneyVND(product.price)}{" "}
+                <span className="fs-13" style={{ color: "#888" }}>
+                  / {product.unit}
+                </span>
               </div>
-            }
-          />
-        </Card>
+            </div>
+          }
+        />
+      </Card>
       {/* </Badge.Ribbon> */}
     </CardProductStyle>
   )
