@@ -25,10 +25,10 @@ function HomePage() {
   return (
     <HomeStyled className="d-flex flex-column align-items-center">
       <Slider />
-      <SpinCustom spinning={loading}>
-        <ProductPopular listProduct={listProducts} />
-        <OtherInfo />
-      </SpinCustom>
+      {/* <SpinCustom spinning={loading}> */}
+      <ProductPopular listProduct={listProducts} />
+      <OtherInfo />
+      {/* </SpinCustom> */}
     </HomeStyled>
   )
 }

@@ -3,8 +3,10 @@ import LayoutCommon from "src/components/Common/Layout"
 import SvgIcon from "src/components/SvgIcon"
 import { InfoContact } from "src/constants/constants"
 import { FooterStyled } from "./styled"
+import useDeviceType from "src/lib/useDeviceType"
 
 const Footer = () => {
+  const { isMobile } = useDeviceType()
   return (
     <FooterStyled>
       <div className="content-footer mt-30">
@@ -14,8 +16,8 @@ const Footer = () => {
           className="mb-50"
         />
         <LayoutCommon>
-          <Row gutter={24}>
-            <Col span={7}>
+          <Row gutter={[24, 24]}>
+            <Col xs={24} lg={7}>
               <div className="fs-16 fw-600 text-uppercase mb-24">
                 Thời gian hoạt động
               </div>
@@ -28,7 +30,7 @@ const Footer = () => {
                 <div className="ml-8">8:00 - 22:00</div>
               </div>
             </Col>
-            <Col span={9}>
+            <Col xs={24} lg={9}>
               <div className="fs-16 fw-600 text-uppercase mb-24">Liên hệ</div>
 
               <div className="d-flex align-items-center mb-16">
@@ -46,7 +48,7 @@ const Footer = () => {
                 <div className="ml-8">{InfoContact.address}</div>
               </div>
             </Col>
-            <Col span={8}>
+            <Col xs={24} lg={8}>
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.6050419939!2d106.80891740003713!3d10.841506933782268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752731176b07b1%3A0xb752b24b379bae5e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgVFAuIEhDTQ!5e0!3m2!1svi!2s!4v1730715827735!5m2!1svi!2s"
                 width={"100%"}
@@ -60,7 +62,7 @@ const Footer = () => {
           </Row>
         </LayoutCommon>
       </div>
-      <div className="end-page">
+      <div className={`end-page ${isMobile ? "fs-12" : ""}`}>
         © 2024 Bản quyền thuộc về NGUYỄN PHÚC HẢI FPT
       </div>
     </FooterStyled>

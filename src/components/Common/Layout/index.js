@@ -1,3 +1,4 @@
+import useDeviceType from "src/lib/useDeviceType"
 import styled from "styled-components"
 
 const LayoutStyled = styled.div`
@@ -11,10 +12,15 @@ const LayoutStyled = styled.div`
   .content {
     width: 100%;
   }
+  &.layout-mobile {
+    width: 100%;
+    padding: 0 12px;
+  }
 `
 const LayoutCommon = props => {
+  const { isMobile } = useDeviceType()
   return (
-    <LayoutStyled>
+    <LayoutStyled className={isMobile ? "layout-mobile" : ""}>
       <div className="content" {...props}>
         {props?.children}
       </div>

@@ -11,6 +11,7 @@ import { setListCart, setUserInfo } from "src/redux/appGlobal"
 import AuthService from "src/services/AuthService"
 import CartService from "src/services/CartService"
 import { ModalLoginStyle, StyleLoginModal } from "./styled"
+import useDeviceType from "src/lib/useDeviceType"
 
 const LoginModal = ({
   openLoginModal,
@@ -19,6 +20,8 @@ const LoginModal = ({
   setOpenForgetPassModal,
   stopNavigate = false,
 }) => {
+  const { isMobile } = useDeviceType()
+
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -42,7 +45,7 @@ const LoginModal = ({
         msg: `Dăng nhập thành công!`,
       })
       const data = res?.data
-      console.log('data: ', data);
+      console.log("data: ", data)
       setStorage(STORAGE.TOKEN, data?.token)
       setStorage(STORAGE.USER_INFO, data)
       dispatch(setUserInfo(data))
@@ -63,7 +66,7 @@ const LoginModal = ({
       style={{ top: 20 }}
     >
       <Row>
-        <Col span={12}>
+        <Col span={isMobile ? 0 : 12}>
           <img
             src={bgr_login}
             alt=""
@@ -72,8 +75,8 @@ const LoginModal = ({
             style={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }}
           />
         </Col>
-        <Col span={12}>
-          <StyleLoginModal>
+        <Col span={isMobile ? 24 : 12}>
+          <StyleLoginModal style={isMobile ? { padding: "24px 16px" } : {}}>
             <div className="text-center mb-40">
               <div className="fs-22 fw-600">Chào mừng đến với chúng tôi!</div>
             </div>
@@ -107,8 +110,7 @@ const LoginModal = ({
                     name="remember"
                     valuePropName="checked"
                     className="mb-0"
-                  >
-                  </Form.Item>
+                  ></Form.Item>
                   <Link
                     onClick={() => {
                       setOpenForgetPassModal()

@@ -18,14 +18,15 @@ import SvgIcon from "src/components/SvgIcon"
 import ROUTER from "src/router"
 import { ArrowRightOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
+import useDeviceType from "src/lib/useDeviceType"
 const OtherInfo = () => {
+  const { isMobile } = useDeviceType()
   const navigate = useNavigate()
   const listDataMachine = [
     {
       img: img1,
       title: "Sản phẩm tươi mới",
-      description:
-        "Sản phẩm luôn đảm bảo sự tươi mới, chất lượng tuyệt vời.",
+      description: "Sản phẩm luôn đảm bảo sự tươi mới, chất lượng tuyệt vời.",
     },
     {
       img: img2,
@@ -36,8 +37,7 @@ const OtherInfo = () => {
     {
       img: img3,
       title: "Giao hàng nhanh",
-      description:
-        "Giao hàng nhanh chóng, đáp ứng nhu cầu của người dùng",
+      description: "Giao hàng nhanh chóng, đáp ứng nhu cầu của người dùng",
     },
   ]
   return (
@@ -51,9 +51,13 @@ const OtherInfo = () => {
         <LayoutCommon>
           <Col span={24}>
             <Row gutter={0}>
-              <Col span={12}>
-                <div className="left-slide h-100" >
-                  <img src={slide0} alt="" style={{ width: "100%", height: "100%" }} />
+              <Col xs={24} lg={12}>
+                <div className="left-slide h-100">
+                  <img
+                    src={slide0}
+                    alt=""
+                    style={{ width: "100%", height: "100%" }}
+                  />
                   <div className="content-slide d-flex flex-column justify-content-space-between">
                     <div>
                       <div className="title-slide text-uppercase">
@@ -63,7 +67,8 @@ const OtherInfo = () => {
                         className="fs-14 fw-600 mt-30"
                         style={{ width: "50%" }}
                       >
-                        Chúng tôi cam kết mang đến cho bạn những sản phẩm tươi mới và đảm bảo chất lượng nhất.
+                        Chúng tôi cam kết mang đến cho bạn những sản phẩm tươi
+                        mới và đảm bảo chất lượng nhất.
                       </div>
                     </div>
                     <div
@@ -78,7 +83,7 @@ const OtherInfo = () => {
                   </div>
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} lg={12}>
                 <Swiper
                   direction={"vertical"}
                   pagination={{
@@ -112,8 +117,13 @@ const OtherInfo = () => {
           <div className="title-home">Dịch vụ</div>
           <Row gutter={36}>
             {listDataMachine.map((i, idx) => (
-              <Col span={8} key={idx} className="text-center">
-                <Image preview={false} src={i.img} width={120} fallback={FAILBACK} />
+              <Col xs={24} lg={8} key={idx} className="text-center">
+                <Image
+                  preview={false}
+                  src={i.img}
+                  width={120}
+                  fallback={FAILBACK}
+                />
                 <div className="fw-600 fs-16 mt-16 mb-16 text-uppercase">
                   {i.title}
                 </div>

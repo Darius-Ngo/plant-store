@@ -219,8 +219,8 @@ const CartPage = () => {
               totalMoney={totalMoney}
             />
           ) : (
-            <Row gutter={24}>
-              <Col span={16} className="pb-16">
+            <Row gutter={[24, 24]}>
+              <Col sx={24} lg={16} className="pb-16">
                 <TableCustom
                   dataSource={listCart.map(i => ({
                     ...i,
@@ -243,7 +243,8 @@ const CartPage = () => {
                 />
               </Col>
               <Col
-                span={8}
+                xs={24}
+                lg={8}
                 style={{ borderLeft: "1px solid #ddd", height: "auto" }}
               >
                 <div className="mb-24">

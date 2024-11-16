@@ -1,3 +1,18 @@
+.menu-small {
+  .menu-item {
+    padding: 6px 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    &:hover {
+      color: var(--color-red);
+    }
+    &.selected {
+      color: var(--color-red);
+      font-weight: 600;
+    }
+  }
+}
+
 .ant-menu-submenu-popup > .ant-menu {
   background-color: #fff;
   padding: 5px;

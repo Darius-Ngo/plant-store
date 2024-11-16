@@ -10,6 +10,7 @@ import "./styles.scss"
 import SvgIcon from "src/components/SvgIcon"
 import { useNavigate } from "react-router-dom"
 import ROUTER from "src/router"
+import useDeviceType from "src/lib/useDeviceType"
 
 const list = [
   {
@@ -27,12 +28,13 @@ const list = [
 ]
 
 const Slider = () => {
+  const { isMobile } = useDeviceType()
   // SwiperCore.use([Autoplay, Pagination, Navigation])
 
   return (
-    <div className="wrap-slider">
+    <div className={`wrap-slider ${isMobile ? "mobile-view" : ""}`}>
       <Swiper
-        navigation={true}
+        navigation={!isMobile}
         pagination={{
           dynamicBullets: true,
         }}
@@ -48,7 +50,7 @@ const Slider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <SvgIcon name="border" className="footer-slider" />
+      {!isMobile && <SvgIcon name="border" className="footer-slider" />}
     </div>
   )
 }
@@ -56,6 +58,8 @@ const Slider = () => {
 export default Slider
 
 const SliderItem = ({ active, item }) => {
+  const { isMobile } = useDeviceType()
+
   const navigate = useNavigate()
   return (
     <div
@@ -64,9 +68,14 @@ const SliderItem = ({ active, item }) => {
     >
       <div className="slide-item_title">{item.title}</div>
       <div className="slide-item_description">{item.description}</div>
-      <div className="slide-item_btn" onClick={() => navigate(ROUTER.DS_SAN_PHAM)}>
-        XEM NGAY
-      </div>
+      {!isMobile && (
+        <div
+          className="slide-item_btn"
+          onClick={() => navigate(ROUTER.DS_SAN_PHAM)}
+        >
+          XEM NGAY
+        </div>
+      )}
     </div>
   )
 }

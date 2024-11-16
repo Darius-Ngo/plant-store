@@ -8,6 +8,7 @@ import { getRegexEmail, getRegexPassword } from "src/lib/stringsUtils"
 import AuthService from "src/services/AuthService"
 import styled from "styled-components"
 import { ModalLoginStyle, StyleLoginModal } from "../LoginModal/styled"
+import useDeviceType from "src/lib/useDeviceType"
 
 const ModalStyle = styled.div`
   .ant-input-search-button,
@@ -25,6 +26,7 @@ const ModalStyle = styled.div`
 const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
+  const { isMobile } = useDeviceType()
 
   const handleSubmit = async () => {
     try {
@@ -57,7 +59,7 @@ const RegisterModal = ({ open, handleCancel, handleLogin, handleOk }) => {
         <SpinCustom spinning={loading}>
           <Row>
             <Col span={24}>
-              <StyleLoginModal>
+              <StyleLoginModal style={isMobile ? { padding: "24px 16px" } : {}}>
                 <div className="text-center mb-30">
                   <div className="fs-24 fw-600">Đăng ký tài khoản</div>
                 </div>

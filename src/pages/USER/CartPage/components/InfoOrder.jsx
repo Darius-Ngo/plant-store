@@ -12,8 +12,11 @@ import ROUTER from "src/router"
 import CartService from "src/services/CartService"
 import OrderService from "src/services/OrderService"
 import { InfoOrderStyle } from "../styled"
+import useDeviceType from "src/lib/useDeviceType"
 
 const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
+  const { isMobile } = useDeviceType()
+
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
@@ -81,7 +84,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
       <InfoOrderStyle>
         <Form layout="vertical" form={form}>
           <Row gutter={24}>
-            <Col span={16} className="pb-16">
+            <Col xs={24} lg={16} className="pb-16">
               <div
                 className="fs-16 fw-600 mb-16 pb-12 text-uppercase d-flex justify-content-space-between align-items-flex-end"
                 style={{ borderBottom: "2px solid #ddd" }}
@@ -89,10 +92,10 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                 Thông tin đặt hàng
               </div>
               <Row gutter={24}>
-                <Col span={24}>
+                <Col xs={24} lg={24}>
                   <div className="fw-600 mb-12">Thông tin người nhận</div>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} lg={12}>
                   <Form.Item
                     rules={[
                       {
@@ -105,7 +108,7 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                     <FlInput label="Tên người nhận" isRequired />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} lg={12}>
                   <Form.Item
                     rules={[
                       {
@@ -122,11 +125,11 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                     <FlInput label="SĐT người nhận" isRequired />
                   </Form.Item>
                 </Col>
-                <Col span={24}>
+                <Col xs={24} lg={24}>
                   <div className="fw-600 mb-12">Địa chỉ nhận hàng</div>
                 </Col>
-                <Col span={24}></Col>
-                <Col span={24}>
+                <Col xs={24} lg={24}></Col>
+                <Col xs={24} lg={24}>
                   <Form.Item
                     rules={[
                       {
@@ -139,10 +142,10 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
                     <FlInput label="Địa chỉ nhận hàng" isRequired />
                   </Form.Item>
                 </Col>
-                <Col span={24}>
+                <Col xs={24} lg={24}>
                   <div className="fw-600 mb-12">Ghi chú cho cửa hàng</div>
                 </Col>
-                <Col span={24}>
+                <Col xs={24} lg={24}>
                   <Form.Item name={"note"}>
                     <FlInput textArea label="Ghi chú" style={{ height: 120 }} />
                   </Form.Item>
@@ -150,7 +153,8 @@ const InfoOrder = ({ listProduct, userInfo, totalMoney }) => {
               </Row>
             </Col>
             <Col
-              span={8}
+              xs={24}
+              lg={8}
               style={{ borderLeft: "1px solid #ddd", height: "auto" }}
             >
               <div className="mb-24">

@@ -28,18 +28,6 @@ export const ProductPopularStyle = styled.div`
   padding: 50px 0;
 
   .list-product {
-    /* margin-top: 40px;
-    width: 100%;
-    background: #f5f2eb;
-    padding-top: 35px; */
-    /* .heading {
-      text-transform: uppercase;
-      font-size: 24px;
-      font-weight: 700;
-      color: #e7b45a;
-      text-align: center;
-      margin-bottom: 40px;
-    } */
     .product-name {
       font-size: 18px;
       font-weight: 600;
@@ -103,6 +91,9 @@ export const ProductPopularStyle = styled.div`
         font-weight: bold;
       }
     }
+  }
+  &.mobile-view {
+    padding: 24px 0;
   }
 `
 export const NewsStyle = styled.div`

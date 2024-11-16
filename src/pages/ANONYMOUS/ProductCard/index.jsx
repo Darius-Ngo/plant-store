@@ -18,7 +18,7 @@ const ProductCard = ({ hoverable = false, product, isSmall = false }) => {
       <Card
         hoverable={hoverable}
         style={{
-          width: isSmall ? 210 : 240,
+          width: isSmall ? "100%" : 230,
         }}
         cover={<img alt="ảnh" src={product.imageUrl} className="product-img" />}
         className="pointer"

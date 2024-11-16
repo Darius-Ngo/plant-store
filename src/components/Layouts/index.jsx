@@ -1,5 +1,15 @@
-import { ShoppingCartOutlined } from "@ant-design/icons"
-import { Avatar, Badge, Col, Drawer, Dropdown, Layout, Menu, Row } from "antd"
+import { MenuOutlined, ShoppingCartOutlined } from "@ant-design/icons"
+import {
+  Avatar,
+  Badge,
+  Col,
+  Divider,
+  Drawer,
+  Dropdown,
+  Layout,
+  Menu,
+  Row,
+} from "antd"
 import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -24,10 +34,12 @@ import RegisterModal from "./component/RegisterModal"
 import { CustomMenuStyled, LayoutStyled, StyleMenuAccount } from "./styled"
 import "./styles.scss"
 import BreadcrumbHome from "./component/BreadcrumbHome/BreadcrumbHome"
+import useDeviceType from "src/lib/useDeviceType"
 
 const { Header, Content } = Layout
 
 const MainLayout = ({ children }) => {
+  const { isMobile } = useDeviceType()
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
@@ -45,6 +57,7 @@ const MainLayout = ({ children }) => {
   const [openInfoModal, setOpenInfoModal] = useState(false)
   const [openModalChangePass, setOpenModalChangePass] = useState(false)
   const [isTransparent, setIsTransparent] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const onClickMenu = key => {
     if (isModelNotification) {
@@ -154,146 +167,175 @@ const MainLayout = ({ children }) => {
     <LayoutStyled>
       <Header
         className={`header-background ${
-          location?.pathname === ROUTER.HOME && isTransparent
+          location?.pathname === ROUTER.HOME && isTransparent && !isMobile
             ? "transparent"
             : ""
         }`}
       >
         <div className="d-flex-start">
           <div className="w-100">
-            {React.createElement(LayoutCommon, {
-              children: (
-                <Row
-                  gutter={36}
-                  className=" pt-5 pb-5 d-flex align-items-center justify-content-space-between"
-                  style={{
-                    margin: "auto",
-                  }}
-                >
-                  <Col
-                    className={`d-flex-center justify-content-flex-start nowrap`}
+            {!isMobile ? (
+              React.createElement(LayoutCommon, {
+                children: (
+                  <Row
+                    gutter={36}
+                    className=" pt-5 pb-5 d-flex align-items-center justify-content-space-between"
                     style={{
-                      whiteSpace: "nowrap",
-                      height: "40px",
-                      paddingLeft: 0,
-                      width: "fit-content",
+                      margin: "auto",
                     }}
                   >
-                    <div
-                      className={"mr-40"}
-                      onClick={() => {
-                        navigate(ROUTER.HOME)
+                    <Col
+                      className={`d-flex-center justify-content-flex-start nowrap`}
+                      style={{
+                        whiteSpace: "nowrap",
+                        height: "40px",
+                        paddingLeft: 0,
+                        width: "fit-content",
                       }}
                     >
-                      <span
-                        className={`fw-600 d-flex-center h-100pe ${
-                          UseWindowSize.isMobile() ? "fs-12" : "fs-20"
-                        }`}
+                      <div
+                        className={"mr-40"}
+                        onClick={() => {
+                          navigate(ROUTER.HOME)
+                        }}
                       >
-                        <img
-                          src={
-                            location?.pathname === ROUTER.HOME && isTransparent
-                              ? Logo
-                              : Logo2
-                          }
-                          className="logo mr-12"
-                          alt="logo"
-                        />
-                        <div className="logo-text pointer">Farm Connect</div>
-                      </span>
-                    </div>
-                  </Col>
-                  <Col
-                    style={{ width: 0 }}
-                    className="d-flex algin-items-center justify-content-flex-end"
-                    flex={"auto"}
-                  >
-                    <CustomMenuStyled className="mr-40">
-                      <Menu
-                        onClick={key => onClickMenu(key)}
-                        selectedKeys={selectedKey}
-                        mode="horizontal"
-                        items={MenuHeader()}
-                      />
-                    </CustomMenuStyled>
-                    <Row
-                      gutter={30}
-                      className="align-items-center layout-action"
+                        <span
+                          className={`fw-600 d-flex-center h-100pe ${
+                            UseWindowSize.isMobile() ? "fs-12" : "fs-20"
+                          }`}
+                        >
+                          <img
+                            src={
+                              location?.pathname === ROUTER.HOME &&
+                              isTransparent
+                                ? Logo
+                                : Logo2
+                            }
+                            className="logo mr-12"
+                            alt="logo"
+                          />
+                          <div className="logo-text pointer">Farm Connect</div>
+                        </span>
+                      </div>
+                    </Col>
+                    <Col
+                      style={{ width: 0 }}
+                      className="d-flex algin-items-center justify-content-flex-end"
+                      flex={"auto"}
                     >
-                      {!!isLogin ? (
-                        <div className="d-flex justify-content-flex-end align-items-center">
-                          {location.pathname !== ROUTER.CHI_TIET_GIO_HANG && (
-                            <Badge
-                              count={listCart?.length}
-                              overflowCount={99}
-                              size="middle"
-                              className="badge-count mr-12 pointer"
-                            >
-                              <Dropdown
-                                overlay={<CartSmall />}
-                                placement="bottomRight"
-                                arrow={{ pointAtCenter: true }}
+                      <CustomMenuStyled className="mr-40">
+                        <Menu
+                          onClick={key => onClickMenu(key)}
+                          selectedKeys={selectedKey}
+                          mode="horizontal"
+                          items={MenuHeader()}
+                        />
+                      </CustomMenuStyled>
+                      <Row
+                        gutter={30}
+                        className="align-items-center layout-action"
+                      >
+                        {!!isLogin ? (
+                          <div className="d-flex justify-content-flex-end align-items-center">
+                            {location.pathname !== ROUTER.CHI_TIET_GIO_HANG && (
+                              <Badge
+                                count={listCart?.length}
+                                overflowCount={99}
+                                size="middle"
+                                className="badge-count mr-12 pointer"
                               >
-                                <div className="wrap-icon-cart">
-                                  <ShoppingCartOutlined className="fs-18" />
-                                </div>
-                              </Dropdown>
-                            </Badge>
-                          )}
-                          {/* <Notification /> */}
-                          <Dropdown
-                            overlay={menuAccount}
-                            overlayStyle={{ minWidth: "200px" }}
-                          >
-                            <Row gutter={5} className="pointer ">
-                              <Col>
-                                <div className="account-infor-avatar">
-                                  <Avatar
-                                    // src={userInfo?.avatar}
-                                    size={32}
-                                    className="style-avt mr-8"
-                                    icon={<SvgIcon name="user-header" />}
-                                  />
-                                  <span className="mr-8 max-line1">
-                                    {userInfo?.username}
-                                  </span>
-                                  <SvgIcon name="arrow-down-primary" />
-                                </div>
-                              </Col>
+                                <Dropdown
+                                  overlay={<CartSmall />}
+                                  placement="bottomRight"
+                                  arrow={{ pointAtCenter: true }}
+                                >
+                                  <div className="wrap-icon-cart">
+                                    <ShoppingCartOutlined className="fs-18" />
+                                  </div>
+                                </Dropdown>
+                              </Badge>
+                            )}
+                            {/* <Notification /> */}
+                            <Dropdown
+                              overlay={menuAccount}
+                              overlayStyle={{ minWidth: "200px" }}
+                            >
+                              <Row gutter={5} className="pointer ">
+                                <Col>
+                                  <div className="account-infor-avatar">
+                                    <Avatar
+                                      // src={userInfo?.avatar}
+                                      size={32}
+                                      className="style-avt mr-8"
+                                      icon={<SvgIcon name="user-header" />}
+                                    />
+                                    <span className="mr-8 max-line1">
+                                      {userInfo?.username}
+                                    </span>
+                                    <SvgIcon name="arrow-down-primary" />
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Dropdown>
+                          </div>
+                        ) : (
+                          <div className="d-flex align-items-center h-100 ">
+                            <Row
+                              // onClick={() => navigate(ROUTER.DANG_NHAP)}
+                              onClick={() => dispatch(setOpenLoginModal(true))}
+                              className="align-items-center pointer login-item"
+                            >
+                              <SvgIcon
+                                name="user_login"
+                                className="login-icon"
+                              />
+                              <span className="login-item_text">Đăng nhập</span>
                             </Row>
-                          </Dropdown>
-                        </div>
-                      ) : (
-                        <div className="d-flex align-items-center h-100 ">
-                          <Row
-                            // onClick={() => navigate(ROUTER.DANG_NHAP)}
-                            onClick={() => dispatch(setOpenLoginModal(true))}
-                            className="align-items-center pointer login-item"
-                          >
-                            <SvgIcon name="user_login" className="login-icon" />
-                            <span className="login-item_text">Đăng nhập</span>
-                          </Row>
-                          <Row
-                            // onClick={() => navigate(ROUTER.DANG_KY)}
-                            onClick={() => setOpenRegisterModal(true)}
-                            className="align-items-center pointer login-item"
-                          >
-                            <SvgIcon
-                              name="register"
-                              className="register-icon"
-                            />
-                            <span className="login-item_text">Đăng ký</span>
-                          </Row>
-                        </div>
-                      )}
-                    </Row>
-                  </Col>
-                </Row>
-              ),
-            })}
+                            <Row
+                              // onClick={() => navigate(ROUTER.DANG_KY)}
+                              onClick={() => setOpenRegisterModal(true)}
+                              className="align-items-center pointer login-item"
+                            >
+                              <SvgIcon
+                                name="register"
+                                className="register-icon"
+                              />
+                              <span className="login-item_text">Đăng ký</span>
+                            </Row>
+                          </div>
+                        )}
+                      </Row>
+                    </Col>
+                  </Row>
+                ),
+              })
+            ) : (
+              <div className="d-flex align-items-center justify-content-space-between p-12 pl-16 pr-16">
+                <MenuOutlined
+                  style={{ color: "#fff" }}
+                  className="fs-16 pointer"
+                  onClick={() => setOpenDrawer(true)}
+                />
+                {!!isLogin && (
+                  <Badge
+                    count={listCart?.length}
+                    overflowCount={99}
+                    size="small"
+                    onClick={() => navigate(ROUTER.CHI_TIET_GIO_HANG)}
+                  >
+                    <ShoppingCartOutlined
+                      style={{ color: "#fff" }}
+                      className="fs-18 pointer"
+                      onClick={() => navigate(ROUTER.CHI_TIET_GIO_HANG)}
+                    />
+                  </Badge>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </Header>
+
       <BreadcrumbHome />
       <Layout>
         <Content className="site-layout-background">
@@ -357,6 +399,107 @@ const MainLayout = ({ children }) => {
           open={openForgetPassModal}
           onCancel={() => setOpenForgetPassModal(false)}
         />
+      )}
+      {isMobile && (
+        <Drawer
+          title={
+            <div style={{ color: "var(--color-brown)" }} className="fs-18">
+              Farm Connects
+            </div>
+          }
+          placement={"left"}
+          closable={false}
+          onClose={() => setOpenDrawer(false)}
+          open={openDrawer}
+          style={{ width: "80%", marginTop: 40 }}
+          className="menu-small"
+        >
+          <div
+            className={`menu-item fw-600 fs-16 pl-0 ${
+              selectedKey?.[0] === ROUTER.HOME ? "selected" : ""
+            }`}
+            onClick={() => {
+              setOpenDrawer(false)
+              navigate(ROUTER.HOME)
+            }}
+          >
+            Trang chủ
+          </div>
+          <div
+            className={`menu-item fw-600 fs-16 pl-0 ${
+              selectedKey?.[0] === ROUTER.DS_SAN_PHAM ? "selected" : ""
+            }`}
+            onClick={() => {
+              setOpenDrawer(false)
+              navigate(ROUTER.DS_SAN_PHAM)
+            }}
+          >
+            Sản phẩm
+          </div>
+          <Divider />
+          {!isLogin ? (
+            <>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  dispatch(setOpenLoginModal(true))
+                }}
+              >
+                Đăng nhập
+              </div>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  setOpenRegisterModal(true)
+                }}
+              >
+                Đăng ký
+              </div>
+            </>
+          ) : (
+            <div>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  setOpenInfoModal(true)
+                }}
+              >
+                Thông tin tài khoản
+              </div>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  navigate(ROUTER.DS_DON_DAT_HANG)
+                }}
+              >
+                Danh sách đơn hàng
+              </div>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  setOpenModalChangePass(true)
+                }}
+              >
+                Đổi mật khẩu
+              </div>
+              <div
+                className={`menu-item fw-600 fs-14 pl-0 `}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  handleLogout()
+                }}
+                style={{ color: "#ED1117" }}
+              >
+                Đăng xuất
+              </div>
+            </div>
+          )}
+        </Drawer>
       )}
     </LayoutStyled>
   )

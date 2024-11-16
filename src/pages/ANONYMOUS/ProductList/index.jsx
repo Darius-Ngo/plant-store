@@ -7,7 +7,10 @@ import ProductService from "src/services/ProductService/index.js"
 import ProductCard from "../ProductCard/index.jsx"
 import "./styled.js"
 import { ProductListStyle } from "./styled.js"
+import useDeviceType from "src/lib/useDeviceType.js"
 const ProductList = () => {
+  const { isMobile } = useDeviceType()
+
   const [loading, setLoading] = useState(false)
   const [listProducts, setListProducts] = useState([])
   const [categoryName, setCategoryName] = useState("Đà Lạt")
@@ -39,7 +42,7 @@ const ProductList = () => {
   }, [page, pageSize, categoryName])
 
   return (
-    <ProductListStyle>
+    <ProductListStyle style={isMobile ? { padding: 0 } : {}}>
       <SpinCustom spinning={loading}>
         <LayoutCommon>
           <Row className="mb-16" gutter={[16, 16]}>
@@ -102,11 +105,21 @@ const ProductList = () => {
               </Button>
             </Col>
           </Row>
-          <Space size={16} wrap={true}>
-            {listProducts.map((product, i) => (
-              <ProductCard product={product} isSmall={true} />
-            ))}
-          </Space>
+          {isMobile ? (
+            <Row gutter={[16, 16]}>
+              {listProducts.map((product, i) => (
+                <Col xs={24} md={12}>
+                  <ProductCard product={product} isSmall={isMobile} />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Space size={16} wrap={true}>
+              {listProducts.map((product, i) => (
+                <ProductCard product={product} isSmall={isMobile} />
+              ))}
+            </Space>
+          )}
           <div className="d-flex align-items-center justify-content-center mt-24 w-100">
             <Pagination
               className="d-flex"

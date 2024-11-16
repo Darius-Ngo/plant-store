@@ -13,10 +13,11 @@ import { setListCart } from "src/redux/appGlobal"
 import CartService from "src/services/CartService"
 import ProductCard from "../ProductCard"
 import { InputChangeQuantity, ProductDetailStyle, TabsStyled } from "./styled"
+import useDeviceType from "src/lib/useDeviceType"
 
 const ProductDetail = () => {
   const { userInfo, listCart } = useSelector(state => state?.appGlobal)
-  console.log("listCart: ", listCart)
+  const { isMobile } = useDeviceType()
   const { product } = useLocation().state
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -134,16 +135,20 @@ const ProductDetail = () => {
         <div className="container-product-detail-page_content">
           <LayoutCommon>
             <div className="wrap-info">
-              <Row gutter={16}>
-                <Col span={8}>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} lg={8}>
                   <div className="wrap-img">
                     <img src={product?.imageUrl} alt={product?.name} />
                   </div>
                 </Col>
-                <Col span={12}>
-                  <div className="wrap-content">
+                <Col xs={24} lg={12}>
+                  <div className={`wrap-content ${isMobile ? "w-100" : ""}`}>
                     <div>
-                      <div className="product-detail-title">
+                      <div
+                        className={`product-detail-title ${
+                          isMobile ? "fs-28 mb-24" : ""
+                        }`}
+                      >
                         {product?.name}
                       </div>
                     </div>
@@ -215,7 +220,7 @@ const ProductDetail = () => {
           </LayoutCommon>
           <LayoutCommon>
             <Row gutter={16}>
-              <Col span={18} style={{ minHeight: 300 }}>
+              <Col xs={24} lg={18} style={{ minHeight: 300 }}>
                 <div className="wrap-info mt-20 h-100">
                   <TabsStyled>
                     <Tabs
@@ -226,7 +231,7 @@ const ProductDetail = () => {
                   </TabsStyled>
                 </div>
               </Col>
-              <Col span={6}>
+              <Col xs={24} lg={6}>
                 <div className="wrap-info mt-20 h-100">
                   <TabsStyled>
                     <Tabs
@@ -243,7 +248,10 @@ const ProductDetail = () => {
                                 ?.filter(i => i.id !== product.id)
                                 ?.map((product, i) => (
                                   <Col span={24} key={product.id}>
-                                    <ProductCard product={product} />
+                                    <ProductCard
+                                      product={product}
+                                      isSmall={isMobile}
+                                    />
                                   </Col>
                                 ))}
                             </Row>
